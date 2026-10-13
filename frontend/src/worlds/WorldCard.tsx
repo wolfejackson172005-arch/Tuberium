@@ -1,7 +1,8 @@
 import type { CSSProperties, ReactNode } from "react";
 import { Check, ChevronRight, CircleAlert, Clock, Ellipsis, Pause, PencilLine, Play, RotateCw } from "lucide-react";
-import type { MockWorld, WorldStatus } from "../mock/worlds";
+import type { WorldStatus } from "../mock/worlds";
 import { findTheme } from "../themes";
+import type { World } from "./world";
 import { WorldScene } from "./WorldScene";
 
 // Status is never color alone: every status has a word and an icon too.
@@ -37,7 +38,13 @@ function money(usd: number): string {
   return `$${usd.toFixed(2)}`;
 }
 
-export function WorldCard({ world, index }: { world: MockWorld; index: number }) {
+interface Props {
+  world: World;
+  index: number;
+  onOpen: (id: string) => void;
+}
+
+export function WorldCard({ world, index, onOpen }: Props) {
   const status = STATUS[world.status];
   const action = ACTION[world.status];
   const percent = Math.round(world.progress * 100);
@@ -108,7 +115,7 @@ export function WorldCard({ world, index }: { world: MockWorld; index: number })
             </span>
           </div>
           <div className="world-card__actions">
-            <button type="button" className="button button--plain">
+            <button type="button" className="button button--plain" onClick={() => onOpen(world.id)}>
               Open
             </button>
             <button type="button" className={`button button--${action.kind}`}>

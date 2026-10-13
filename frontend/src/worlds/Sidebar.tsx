@@ -1,13 +1,13 @@
 import type { LucideIcon } from "lucide-react";
 import { ChevronRight, ClipboardCheck, Globe, Palette, ScrollText, Settings, Sparkles, Users } from "lucide-react";
-import { mockApprovalCount, mockSpend, mockUser } from "../mock/worlds";
+import { mockSpend, mockUser } from "../mock/worlds";
 
-const ITEMS: { id: string; label: string; icon: LucideIcon; count?: number }[] = [
+const ITEMS: { id: string; label: string; icon: LucideIcon }[] = [
   { id: "worlds", label: "Worlds", icon: Globe },
   { id: "presets", label: "Presets", icon: Sparkles },
   { id: "agents", label: "Agent Library", icon: Users },
   { id: "themes", label: "Themes", icon: Palette },
-  { id: "approvals", label: "Approvals", icon: ClipboardCheck, count: mockApprovalCount },
+  { id: "approvals", label: "Approvals", icon: ClipboardCheck },
   { id: "logs", label: "Logs", icon: ScrollText },
   { id: "settings", label: "Settings", icon: Settings },
 ];
@@ -23,8 +23,9 @@ function Logo() {
   );
 }
 
-export function Sidebar({ activeId }: { activeId: string }) {
+export function Sidebar({ activeId, approvals }: { activeId: string; approvals: number }) {
   const spentShare = Math.min(1, mockSpend.todayUsd / mockSpend.limitUsd);
+  const counts: Record<string, number> = { approvals };
 
   return (
     <nav className="worlds-nav" aria-label="Main">
@@ -34,23 +35,26 @@ export function Sidebar({ activeId }: { activeId: string }) {
       </div>
 
       <ul className="worlds-nav__list">
-        {ITEMS.map(({ id, label, icon: Icon, count }) => (
-          <li key={id}>
-            <button
-              type="button"
-              className={id === activeId ? "worlds-nav__item worlds-nav__item--active" : "worlds-nav__item"}
-              aria-current={id === activeId ? "page" : undefined}
-            >
-              <Icon className="icon" />
-              <span className="worlds-nav__label">{label}</span>
-              {count !== undefined && count > 0 && (
-                <span className="worlds-nav__count" aria-label={`${count} waiting`}>
-                  {count}
-                </span>
-              )}
-            </button>
-          </li>
-        ))}
+        {ITEMS.map(({ id, label, icon: Icon }) => {
+          const count = counts[id];
+          return (
+            <li key={id}>
+              <button
+                type="button"
+                className={id === activeId ? "worlds-nav__item worlds-nav__item--active" : "worlds-nav__item"}
+                aria-current={id === activeId ? "page" : undefined}
+              >
+                <Icon className="icon" />
+                <span className="worlds-nav__label">{label}</span>
+                {count !== undefined && count > 0 && (
+                  <span className="worlds-nav__count" aria-label={`${count} waiting`}>
+                    {count}
+                  </span>
+                )}
+              </button>
+            </li>
+          );
+        })}
       </ul>
 
       <div className="worlds-nav__foot">
