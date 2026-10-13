@@ -15,7 +15,7 @@ Before any structural change, read `docs/VISION.md` (what we're building) and `d
 2. **The engine enforces lines and permissions, not the AI.** Agents reach each other only through `talk_to`, which checks lines. Permission levels map to SDK tools exactly as described in ARCHITECTURE.md. Never use `bypassPermissions`. The overseer can suggest changes but never apply them.
 3. **If it isn't an event, it didn't happen.** Every agent action goes through the event bus using the run events table in ARCHITECTURE.md. Don't invent event types without updating that table.
 4. **Agents think through a Runner.** Only files in `backend/app/runners/` may import `claude_agent_sdk` or any model SDK.
-5. **Themes change the look, never the meaning.** No theme names, colors, emoji or animal names in the spec, the backend, or component logic. Components use CSS variables and the active theme pack. Permission badges, costs and approval requests are never hidden or renamed by a theme.
+5. **Themes change the look, never the meaning.** No theme names, colors, emoji or animal names in the spec, the backend, or component logic. Components use CSS variables and the active theme pack. Permission badges, costs and approval requests are never hidden or renamed by a theme. Map lines are one edge per spec line (house-to-house web), never merged village roads.
 
 ## Security (see docs/SAFETY.md)
 

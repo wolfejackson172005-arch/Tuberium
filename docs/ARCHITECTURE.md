@@ -197,5 +197,6 @@ Keep two kinds of state apart:
 
 Map tips:
 
+- **One React Flow edge per spec line.** No merging edges into a shared "road" polyline. Two agents that can talk get one direct edge; unrelated lines may cross visually but never combine into junctions or trunks. The topology matches `lines[]`, not a street map.
 - Homes are circles, so draw lines from border to border: each end sits at `center + radius × direction to the other home`. React Flow's "floating edges" example shows the idea for rectangles; the circle math is simpler.
 - A traveler is SVG inside the edge component. Move it with `<animateMotion>` on the edge path, or `path.getPointAtLength()` in a `requestAnimationFrame` loop. Reverse direction for replies.

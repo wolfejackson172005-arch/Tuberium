@@ -17,7 +17,7 @@ Gamify, simplify and visualize agentic AI tasks and pipelines, so people can see
 The default look (Tuberian): a village where every agent has a house, paths connect who can talk, and critters walk the paths carrying messages and files.
 
 - **Agents are homes.** Each agent has a home on the map: a circle, a house, a hut, a lily pad, a machine, depending on the theme.
-- **Lines are who can talk to who.** A line between two agents means they can talk and hand each other files. No line, no talking. Lines are styled by the theme (tubes, vines, conveyor belts, reeds).
+- **Lines are who can talk to who.** A line between two agents means they can talk and hand each other files. No line, no talking. Lines are styled by the theme (tubes, vines, conveyor belts, reeds). On the map, each line is its own direct link between exactly those two homes — a **web** of pairwise connections, not a village road network. Paths must not merge or join at junctions just because routes cross; if A and B can talk, you see one segment A↔B, not a shared trunk other agents use unless they have their own line to someone on that path.
 - **Agents travel.** When one agent talks to another or hands over a file, its character visibly leaves home, travels along the line carrying a speech bubble or a file, and comes back.
 - **Who's doing what, always visible.** Above every home, a status card: the agent's icon and name, a progress bar with a step count ("2/4"), and one line on what it's doing right now ("Sorting 12 new emails").
 - **You control the run.** A top bar shows the time and whether things are running, with pause, play and fast-forward. A sidebar holds Home (the map), Agents, Tasks, Logs and Settings.

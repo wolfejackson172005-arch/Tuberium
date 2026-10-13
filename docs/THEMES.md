@@ -66,6 +66,8 @@ The Tuberian critters need a name. Your call.
 
 The target look for the default theme: a village map, houses as homes, dirt paths as lines, critters walking the paths with speech bubbles and boxes, a dark status card above every house (icon, name, progress bar with step count, what it's doing). Drag this image into Cursor whenever you work on the look.
 
+**Lines vs roads:** Reference art may show cozy dirt paths that visually meet in the middle; the **product** draws one themed segment per spec line, house to house. Think web or graph edges, not merged roads — only pairs that can `talk_to` get a link, and travelers move on that link only.
+
 ## Theme pack shape
 
 A theme is a data file in `frontend/src/themes/`. Components read it; they contain no theme-specific code.
