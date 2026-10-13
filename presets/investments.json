@@ -1,0 +1,164 @@
+{
+  "specVersion": "0.2",
+  "id": "investments",
+  "name": "Investment Desk",
+  "description": "Every weekday morning it researches your watchlist and holdings, writes a plain-English brief, and places the trades that fit your rules. Starts in paper mode (fake money), and asks before every trade by default.",
+  "preset": "investments",
+  "agents": [
+    {
+      "id": "overseer",
+      "name": "Overseer",
+      "kind": "overseer",
+      "template": "overseer",
+      "purpose": "Runs the team. Reads each task, plans the road (who does what, in what order), hands out work along the lines, reviews every result before accepting it, and keeps the progress bar honest. When something keeps going wrong, it suggests a change to the system. It never changes the system on its own: suggestions go to you.",
+      "permissions": {},
+      "position": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "id": "researcher",
+      "name": "Market Researcher",
+      "template": "researcher",
+      "purpose": "Gathers overnight news and price moves for every ticker on your watchlist.",
+      "permissions": {
+        "web": "allow"
+      },
+      "kind": "agent",
+      "position": {
+        "x": 0,
+        "y": -280
+      }
+    },
+    {
+      "id": "analyst",
+      "name": "Portfolio Analyst",
+      "template": "analyst",
+      "purpose": "Reads your holdings file and works out how today's news touches each position.",
+      "permissions": {
+        "readFiles": "allow"
+      },
+      "kind": "agent",
+      "position": {
+        "x": 266,
+        "y": -87
+      }
+    },
+    {
+      "id": "risk",
+      "name": "Risk Checker",
+      "template": "reviewer",
+      "purpose": "Looks for concentration, big swings and anything that changed since yesterday, and calls out what deserves a closer look.",
+      "permissions": {},
+      "kind": "agent",
+      "position": {
+        "x": 165,
+        "y": 227
+      }
+    },
+    {
+      "id": "writer",
+      "name": "Brief Writer",
+      "template": "writer",
+      "purpose": "Turns it all into a one-page morning brief in plain English and saves it.",
+      "permissions": {
+        "writeFiles": "allow"
+      },
+      "kind": "agent",
+      "position": {
+        "x": -165,
+        "y": 227
+      }
+    },
+    {
+      "id": "trader",
+      "name": "Trader",
+      "template": "trader",
+      "purpose": "Places the trades the Risk Checker has cleared, within your rules and the trade caps. Never reads the web itself.",
+      "permissions": {
+        "readFiles": "allow",
+        "trade": "ask"
+      },
+      "limits": {
+        "maxTradeUsd": 500
+      },
+      "kind": "agent",
+      "position": {
+        "x": -266,
+        "y": -87
+      }
+    }
+  ],
+  "lines": [
+    {
+      "id": "o-researcher",
+      "from": "overseer",
+      "to": "researcher"
+    },
+    {
+      "id": "o-analyst",
+      "from": "overseer",
+      "to": "analyst"
+    },
+    {
+      "id": "o-risk",
+      "from": "overseer",
+      "to": "risk"
+    },
+    {
+      "id": "o-writer",
+      "from": "overseer",
+      "to": "writer"
+    },
+    {
+      "id": "o-trader",
+      "from": "overseer",
+      "to": "trader"
+    },
+    {
+      "id": "l1",
+      "from": "researcher",
+      "to": "analyst",
+      "twoWay": false
+    },
+    {
+      "id": "l2",
+      "from": "analyst",
+      "to": "risk"
+    },
+    {
+      "id": "l3",
+      "from": "risk",
+      "to": "trader",
+      "twoWay": false
+    }
+  ],
+  "tasks": [
+    {
+      "id": "morning-brief",
+      "name": "Morning brief",
+      "goal": "Write today's morning brief for the watchlist and holdings in {{holdings}}, then place any trades that fit my rules in {{rules}}.",
+      "inputs": [
+        {
+          "key": "holdings",
+          "label": "Holdings and watchlist",
+          "kind": "file",
+          "default": "holdings.csv"
+        },
+        {
+          "key": "rules",
+          "label": "Your trading rules",
+          "kind": "file",
+          "default": "trading-rules.md"
+        }
+      ],
+      "trigger": {
+        "type": "schedule",
+        "cron": "0 8 * * 1-5",
+        "timezone": "America/New_York"
+      },
+      "maxCostUsd": 0.5
+    }
+  ]
+}

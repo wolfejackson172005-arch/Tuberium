@@ -1,0 +1,132 @@
+{
+  "specVersion": "0.2",
+  "id": "inbox-helper",
+  "name": "Inbox Helper",
+  "description": "Always on. Every new email gets summarized and sorted, replies get drafted, and you get a digest at 5pm. Nothing is sent without your OK.",
+  "preset": "inbox-helper",
+  "agents": [
+    {
+      "id": "overseer",
+      "name": "Overseer",
+      "kind": "overseer",
+      "template": "overseer",
+      "purpose": "Runs the team. Reads each task, plans the road (who does what, in what order), hands out work along the lines, reviews every result before accepting it, and keeps the progress bar honest. When something keeps going wrong, it suggests a change to the system. It never changes the system on its own: suggestions go to you.",
+      "permissions": {},
+      "position": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "id": "reader",
+      "name": "Mail Reader",
+      "template": "reader",
+      "purpose": "Reads each new email and writes a two-line summary: who it's from, what they want, and by when.",
+      "permissions": {
+        "readEmail": "allow"
+      },
+      "kind": "agent",
+      "position": {
+        "x": 0,
+        "y": -280
+      }
+    },
+    {
+      "id": "sorter",
+      "name": "Sorter",
+      "template": "sorter",
+      "purpose": "Labels every email Urgent, Needs reply, FYI or Junk, based on the summaries.",
+      "permissions": {},
+      "kind": "agent",
+      "position": {
+        "x": 280,
+        "y": 0
+      }
+    },
+    {
+      "id": "drafter",
+      "name": "Reply Drafter",
+      "template": "writer",
+      "purpose": "Drafts replies for anything marked Needs reply. Nothing goes out until you approve it.",
+      "permissions": {
+        "readEmail": "allow",
+        "sendEmail": "ask"
+      },
+      "kind": "agent",
+      "position": {
+        "x": 0,
+        "y": 280
+      }
+    },
+    {
+      "id": "digest",
+      "name": "Digest Writer",
+      "template": "writer",
+      "purpose": "Writes an end-of-day digest of everything that came in and what's still waiting on you.",
+      "permissions": {},
+      "kind": "agent",
+      "position": {
+        "x": -280,
+        "y": 0
+      }
+    }
+  ],
+  "lines": [
+    {
+      "id": "o-reader",
+      "from": "overseer",
+      "to": "reader"
+    },
+    {
+      "id": "o-sorter",
+      "from": "overseer",
+      "to": "sorter"
+    },
+    {
+      "id": "o-drafter",
+      "from": "overseer",
+      "to": "drafter"
+    },
+    {
+      "id": "o-digest",
+      "from": "overseer",
+      "to": "digest"
+    },
+    {
+      "id": "l1",
+      "from": "reader",
+      "to": "sorter",
+      "twoWay": false
+    },
+    {
+      "id": "l2",
+      "from": "sorter",
+      "to": "drafter",
+      "twoWay": false
+    }
+  ],
+  "tasks": [
+    {
+      "id": "watch-inbox",
+      "name": "Watch inbox",
+      "goal": "Summarize and sort every new email. Draft replies for anything that needs one.",
+      "trigger": {
+        "type": "always",
+        "watch": "newEmail",
+        "checkEveryMinutes": 5
+      },
+      "maxCostUsd": 0.25
+    },
+    {
+      "id": "daily-digest",
+      "name": "Daily digest",
+      "goal": "Write today's inbox digest: what came in, what was handled, what is still waiting on me.",
+      "trigger": {
+        "type": "schedule",
+        "cron": "0 17 * * *",
+        "timezone": "America/New_York"
+      },
+      "maxCostUsd": 0.25
+    }
+  ]
+}

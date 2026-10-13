@@ -1,0 +1,130 @@
+{
+  "specVersion": "0.2",
+  "id": "data-cleanup",
+  "name": "Data Cleanup",
+  "description": "Hand it a messy spreadsheet or CSV. It profiles it, fixes it, double-checks the fixes and tells you what changed. Your original file is never overwritten.",
+  "preset": "data-cleanup",
+  "agents": [
+    {
+      "id": "overseer",
+      "name": "Overseer",
+      "kind": "overseer",
+      "template": "overseer",
+      "purpose": "Runs the team. Reads each task, plans the road (who does what, in what order), hands out work along the lines, reviews every result before accepting it, and keeps the progress bar honest. When something keeps going wrong, it suggests a change to the system. It never changes the system on its own: suggestions go to you.",
+      "permissions": {},
+      "position": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "id": "profiler",
+      "name": "Profiler",
+      "template": "analyst",
+      "purpose": "Opens the file and reports what's in it: columns, types, blanks, duplicates and odd values.",
+      "permissions": {
+        "readFiles": "allow",
+        "runCode": "allow"
+      },
+      "kind": "agent",
+      "position": {
+        "x": 0,
+        "y": -280
+      }
+    },
+    {
+      "id": "cleaner",
+      "name": "Cleaner",
+      "template": "cleaner",
+      "purpose": "Fixes the problems the profiler found and saves a cleaned copy. Never overwrites the original.",
+      "permissions": {
+        "readFiles": "allow",
+        "writeFiles": "allow",
+        "runCode": "allow"
+      },
+      "kind": "agent",
+      "position": {
+        "x": 280,
+        "y": 0
+      }
+    },
+    {
+      "id": "validator",
+      "name": "Validator",
+      "template": "reviewer",
+      "purpose": "Re-checks the cleaned file and confirms every fix worked without dropping rows by accident.",
+      "permissions": {
+        "readFiles": "allow",
+        "runCode": "allow"
+      },
+      "kind": "agent",
+      "position": {
+        "x": 0,
+        "y": 280
+      }
+    },
+    {
+      "id": "reporter",
+      "name": "Reporter",
+      "template": "writer",
+      "purpose": "Writes a short change log: what was wrong, what changed, and what still needs a human.",
+      "permissions": {},
+      "kind": "agent",
+      "position": {
+        "x": -280,
+        "y": 0
+      }
+    }
+  ],
+  "lines": [
+    {
+      "id": "o-profiler",
+      "from": "overseer",
+      "to": "profiler"
+    },
+    {
+      "id": "o-cleaner",
+      "from": "overseer",
+      "to": "cleaner"
+    },
+    {
+      "id": "o-validator",
+      "from": "overseer",
+      "to": "validator"
+    },
+    {
+      "id": "o-reporter",
+      "from": "overseer",
+      "to": "reporter"
+    },
+    {
+      "id": "l1",
+      "from": "profiler",
+      "to": "cleaner",
+      "twoWay": false
+    },
+    {
+      "id": "l2",
+      "from": "cleaner",
+      "to": "validator"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "clean-file",
+      "name": "Clean a file",
+      "goal": "Clean {{file}}, save the result as a new file, and write a change log.",
+      "inputs": [
+        {
+          "key": "file",
+          "label": "File to clean",
+          "kind": "file"
+        }
+      ],
+      "trigger": {
+        "type": "manual"
+      },
+      "maxCostUsd": 0.75
+    }
+  ]
+}

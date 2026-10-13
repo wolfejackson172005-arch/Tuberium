@@ -1,0 +1,32 @@
+# ---- secrets: never commit these ----
+.env
+.env.*
+!.env.example
+secrets/
+*.pem
+*.key
+*.p12
+credentials*.json
+token*.json
+client_secret*.json
+
+# ---- your data: agents' files and work history ----
+workspaces/
+*.db
+*.sqlite
+*.sqlite3
+out/
+
+# ---- python ----
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+# ---- node ----
+node_modules/
+dist/
+
+# ---- editors / OS ----
+.DS_Store
+Thumbs.db

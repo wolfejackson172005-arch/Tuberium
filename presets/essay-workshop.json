@@ -1,0 +1,140 @@
+{
+  "specVersion": "0.2",
+  "id": "essay-workshop",
+  "name": "Essay Workshop",
+  "description": "Research, outline, draft, critique, revise. The critic and drafter go back and forth until the overseer is happy.",
+  "preset": "essay-workshop",
+  "agents": [
+    {
+      "id": "overseer",
+      "name": "Overseer",
+      "kind": "overseer",
+      "template": "overseer",
+      "purpose": "Runs the team. Reads each task, plans the road (who does what, in what order), hands out work along the lines, reviews every result before accepting it, and keeps the progress bar honest. When something keeps going wrong, it suggests a change to the system. It never changes the system on its own: suggestions go to you.",
+      "permissions": {},
+      "position": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "id": "researcher",
+      "name": "Researcher",
+      "template": "researcher",
+      "purpose": "Finds credible sources on the topic and pulls out the key facts and quotes, with links.",
+      "permissions": {
+        "web": "allow"
+      },
+      "kind": "agent",
+      "position": {
+        "x": 0,
+        "y": -280
+      }
+    },
+    {
+      "id": "outliner",
+      "name": "Outliner",
+      "template": "planner",
+      "purpose": "Turns the research into a clear thesis and a section-by-section outline.",
+      "permissions": {},
+      "kind": "agent",
+      "position": {
+        "x": 280,
+        "y": 0
+      }
+    },
+    {
+      "id": "drafter",
+      "name": "Drafter",
+      "template": "writer",
+      "purpose": "Writes the essay from the outline in the requested tone and length.",
+      "permissions": {},
+      "kind": "agent",
+      "position": {
+        "x": 0,
+        "y": 280
+      }
+    },
+    {
+      "id": "critic",
+      "name": "Critic",
+      "template": "reviewer",
+      "purpose": "Reads the draft like a tough teacher: argument, evidence, flow and grammar. Sends notes back to the drafter.",
+      "permissions": {},
+      "kind": "agent",
+      "position": {
+        "x": -280,
+        "y": 0
+      }
+    }
+  ],
+  "lines": [
+    {
+      "id": "o-researcher",
+      "from": "overseer",
+      "to": "researcher"
+    },
+    {
+      "id": "o-outliner",
+      "from": "overseer",
+      "to": "outliner"
+    },
+    {
+      "id": "o-drafter",
+      "from": "overseer",
+      "to": "drafter"
+    },
+    {
+      "id": "o-critic",
+      "from": "overseer",
+      "to": "critic"
+    },
+    {
+      "id": "l1",
+      "from": "researcher",
+      "to": "outliner",
+      "twoWay": false
+    },
+    {
+      "id": "l2",
+      "from": "outliner",
+      "to": "drafter",
+      "twoWay": false
+    },
+    {
+      "id": "l3",
+      "from": "drafter",
+      "to": "critic"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "write-essay",
+      "name": "Write an essay",
+      "goal": "Write a {{length}} essay on {{topic}} in a {{tone}} tone, with sources listed at the end.",
+      "inputs": [
+        {
+          "key": "topic",
+          "label": "Topic",
+          "kind": "text"
+        },
+        {
+          "key": "length",
+          "label": "Length",
+          "kind": "text",
+          "default": "800-word"
+        },
+        {
+          "key": "tone",
+          "label": "Tone",
+          "kind": "text",
+          "default": "clear, confident"
+        }
+      ],
+      "trigger": {
+        "type": "manual"
+      },
+      "maxCostUsd": 0.75
+    }
+  ]
+}

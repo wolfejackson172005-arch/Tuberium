@@ -1,0 +1,44 @@
+---
+description: Tuberium vision and architecture rules. Apply to every change in this repo.
+alwaysApply: true
+---
+
+# Tuberium rules
+
+Tuberium is a game-like, themed map of an AI agent team: agents live in homes, lines show who can talk to who, an overseer manages everything, and the user watches agents travel, work and ask permission live.
+
+Before any structural change, read `docs/VISION.md` (what we're building) and `docs/ARCHITECTURE.md` (how). For the look, see `docs/img/tuberian-reference.png` and `docs/THEMES.md`.
+
+## The five rules
+
+1. **The system spec is the product.** `spec/system.schema.json` is the source of truth. `backend/app/models.py` and `frontend/src/spec/types.ts` mirror it exactly. New field? Change the schema, `docs/system-spec.md` and `presets/` first, then run `python spec/validate.py`.
+2. **The engine enforces lines and permissions, not the AI.** Agents reach each other only through `talk_to`, which checks lines. Permission levels map to SDK tools exactly as described in ARCHITECTURE.md. Never use `bypassPermissions`. The overseer can suggest changes but never apply them.
+3. **If it isn't an event, it didn't happen.** Every agent action goes through the event bus using the run events table in ARCHITECTURE.md. Don't invent event types without updating that table.
+4. **Agents think through a Runner.** Only files in `backend/app/runners/` may import `claude_agent_sdk` or any model SDK.
+5. **Themes change the look, never the meaning.** No theme names, colors, emoji or animal names in the spec, the backend, or component logic. Components use CSS variables and the active theme pack. Permission badges, costs and approval requests are never hidden or renamed by a theme.
+
+## Security (see docs/SAFETY.md)
+
+- Secrets live only in `backend/.env`, loaded by `backend/app/settings.py`. Never hardcode a key, never put one in the frontend, never use a `VITE_` variable for anything secret.
+- Never read, print, log or echo `.env` or any key, and never put a key in an error message, API response or run event. Use `SecretStr`.
+- When a new setting is needed, add it to `backend/.env.example` with an empty or safe default, and to `settings.py`.
+- The backend binds to 127.0.0.1. Never suggest `--host 0.0.0.0` or exposing the port.
+- Validate every id from a request against `^[a-z0-9][a-z0-9-]*$` before using it in a file path. Agents' file access stays inside `workspaces/<systemId>/`.
+- New agents default to every permission off. Never give `runCode`, `sendEmail`, `postSocial`, `submitForms` or `trade` at `allow` to an agent that also reads the web or email.
+- Every trade goes through the engine's trade guard: paper or live mode from `.env`, `maxTradeUsd`, daily trade cap. No code path may place a trade around it, and nothing in the app may switch paper to live.
+
+## Conventions
+
+- Backend: Python 3.10+, FastAPI, Pydantic v2, type hints everywhere, async route handlers.
+- Frontend: React function components, TypeScript strict mode, React Flow from `@xyflow/react`. No `any`.
+- Keep spec state (what the system is, saved) and run state (what's happening now, never saved with the spec) apart.
+- Never hardcode a color, font or size in a component. Add a CSS variable to the theme pack.
+- Never commit secrets. The API key comes from the `ANTHROPIC_API_KEY` environment variable.
+
+## How to work with me
+
+- Make the smallest change that completes the task I asked for. Don't build ahead into later milestones in `docs/ROADMAP.md`.
+- For anything bigger than one file, tell me the plan in a few sentences before writing code.
+- After each change, tell me exactly how to check it works.
+- I'm learning React and TypeScript on this project. When you use a pattern I may not know (hooks, generics, discriminated unions, async generators, SSE), add a one-line explanation.
+- If my request conflicts with the docs, say so instead of quietly picking one.

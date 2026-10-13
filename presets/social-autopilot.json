@@ -1,0 +1,157 @@
+{
+  "specVersion": "0.2",
+  "id": "social-autopilot",
+  "name": "Social Media Autopilot",
+  "description": "Three times a week it finds a trend, writes the post, plans the visual, checks it against your brand, and posts it once you approve.",
+  "preset": "social-autopilot",
+  "agents": [
+    {
+      "id": "overseer",
+      "name": "Overseer",
+      "kind": "overseer",
+      "template": "overseer",
+      "purpose": "Runs the team. Reads each task, plans the road (who does what, in what order), hands out work along the lines, reviews every result before accepting it, and keeps the progress bar honest. When something keeps going wrong, it suggests a change to the system. It never changes the system on its own: suggestions go to you.",
+      "permissions": {},
+      "position": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "id": "scout",
+      "name": "Trend Scout",
+      "template": "scout",
+      "purpose": "Finds what's trending in your niche this week and suggests three post angles.",
+      "permissions": {
+        "web": "allow"
+      },
+      "kind": "agent",
+      "position": {
+        "x": 0,
+        "y": -280
+      }
+    },
+    {
+      "id": "writer",
+      "name": "Content Writer",
+      "template": "writer",
+      "purpose": "Writes the post and caption in your brand voice.",
+      "permissions": {},
+      "kind": "agent",
+      "position": {
+        "x": 266,
+        "y": -87
+      }
+    },
+    {
+      "id": "visual",
+      "name": "Visual Planner",
+      "template": "designer",
+      "purpose": "Writes the image or video brief: shot list, text overlay and thumbnail idea.",
+      "permissions": {
+        "writeFiles": "allow"
+      },
+      "kind": "agent",
+      "position": {
+        "x": 165,
+        "y": 227
+      }
+    },
+    {
+      "id": "brand",
+      "name": "Brand Checker",
+      "template": "reviewer",
+      "purpose": "Checks every post against your brand rules and the platform's rules before it can go out.",
+      "permissions": {},
+      "kind": "agent",
+      "position": {
+        "x": -165,
+        "y": 227
+      }
+    },
+    {
+      "id": "publisher",
+      "name": "Publisher",
+      "template": "poster",
+      "purpose": "Publishes approved posts to your accounts. Always asks you first.",
+      "permissions": {
+        "postSocial": "ask"
+      },
+      "kind": "agent",
+      "position": {
+        "x": -266,
+        "y": -87
+      }
+    }
+  ],
+  "lines": [
+    {
+      "id": "o-scout",
+      "from": "overseer",
+      "to": "scout"
+    },
+    {
+      "id": "o-writer",
+      "from": "overseer",
+      "to": "writer"
+    },
+    {
+      "id": "o-visual",
+      "from": "overseer",
+      "to": "visual"
+    },
+    {
+      "id": "o-brand",
+      "from": "overseer",
+      "to": "brand"
+    },
+    {
+      "id": "o-publisher",
+      "from": "overseer",
+      "to": "publisher"
+    },
+    {
+      "id": "l1",
+      "from": "scout",
+      "to": "writer",
+      "twoWay": false
+    },
+    {
+      "id": "l2",
+      "from": "writer",
+      "to": "visual"
+    },
+    {
+      "id": "l3",
+      "from": "writer",
+      "to": "brand"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "post",
+      "name": "Make a post",
+      "goal": "Create one post about {{niche}} for {{platform}} and publish it once I approve.",
+      "inputs": [
+        {
+          "key": "niche",
+          "label": "Niche",
+          "kind": "text",
+          "default": "your niche"
+        },
+        {
+          "key": "platform",
+          "label": "Platform",
+          "kind": "text",
+          "default": "Instagram"
+        }
+      ],
+      "trigger": {
+        "type": "schedule",
+        "cron": "0 10 * * 1,3,5",
+        "timezone": "America/New_York"
+      },
+      "maxCostUsd": 0.5
+    }
+  ]
+}

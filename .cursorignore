@@ -1,0 +1,19 @@
+# Files Cursor's AI must never read, index or send anywhere.
+# Same syntax as .gitignore.
+
+.env
+.env.*
+!.env.example
+secrets/
+*.pem
+*.key
+*.p12
+credentials*.json
+token*.json
+client_secret*.json
+
+# Your data: emails, resumes, holdings and work history the agents touched.
+workspaces/
+*.db
+*.sqlite
+*.sqlite3

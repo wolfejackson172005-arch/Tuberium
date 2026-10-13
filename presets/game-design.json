@@ -1,0 +1,149 @@
+{
+  "specVersion": "0.2",
+  "id": "game-design",
+  "name": "Game Design Studio",
+  "description": "A small design team that turns a rough game idea into a one-page design doc, then gets roasted by a playtest critic.",
+  "preset": "game-design",
+  "agents": [
+    {
+      "id": "overseer",
+      "name": "Overseer",
+      "kind": "overseer",
+      "template": "overseer",
+      "purpose": "Runs the team. Reads each task, plans the road (who does what, in what order), hands out work along the lines, reviews every result before accepting it, and keeps the progress bar honest. When something keeps going wrong, it suggests a change to the system. It never changes the system on its own: suggestions go to you.",
+      "permissions": {},
+      "position": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "id": "concept",
+      "name": "Concept Designer",
+      "template": "designer",
+      "purpose": "Pitches the core idea: genre, hook, player fantasy and what makes it different. Assembles the final design doc.",
+      "permissions": {
+        "writeFiles": "allow"
+      },
+      "kind": "agent",
+      "position": {
+        "x": 0,
+        "y": -280
+      }
+    },
+    {
+      "id": "mechanics",
+      "name": "Mechanics Designer",
+      "template": "designer",
+      "purpose": "Designs the core loop, controls, progression and economy, with real numbers.",
+      "permissions": {},
+      "kind": "agent",
+      "position": {
+        "x": 266,
+        "y": -87
+      }
+    },
+    {
+      "id": "levels",
+      "name": "Level Designer",
+      "template": "designer",
+      "purpose": "Sketches the first levels or areas and how each one teaches a mechanic.",
+      "permissions": {},
+      "kind": "agent",
+      "position": {
+        "x": 165,
+        "y": 227
+      }
+    },
+    {
+      "id": "lore",
+      "name": "Lore Writer",
+      "template": "writer",
+      "purpose": "Writes the world, the characters and the reason the player should care.",
+      "permissions": {},
+      "kind": "agent",
+      "position": {
+        "x": -165,
+        "y": 227
+      }
+    },
+    {
+      "id": "critic",
+      "name": "Playtest Critic",
+      "template": "reviewer",
+      "purpose": "Pokes holes: what's boring, unbalanced, confusing or too big to build.",
+      "permissions": {},
+      "kind": "agent",
+      "position": {
+        "x": -266,
+        "y": -87
+      }
+    }
+  ],
+  "lines": [
+    {
+      "id": "o-concept",
+      "from": "overseer",
+      "to": "concept"
+    },
+    {
+      "id": "o-mechanics",
+      "from": "overseer",
+      "to": "mechanics"
+    },
+    {
+      "id": "o-levels",
+      "from": "overseer",
+      "to": "levels"
+    },
+    {
+      "id": "o-lore",
+      "from": "overseer",
+      "to": "lore"
+    },
+    {
+      "id": "o-critic",
+      "from": "overseer",
+      "to": "critic"
+    },
+    {
+      "id": "l1",
+      "from": "concept",
+      "to": "mechanics"
+    },
+    {
+      "id": "l2",
+      "from": "concept",
+      "to": "lore"
+    },
+    {
+      "id": "l3",
+      "from": "mechanics",
+      "to": "levels"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "design-doc",
+      "name": "Design doc from an idea",
+      "goal": "Turn this idea into a one-page game design doc for {{platform}}: {{idea}}",
+      "inputs": [
+        {
+          "key": "idea",
+          "label": "Your idea",
+          "kind": "longtext"
+        },
+        {
+          "key": "platform",
+          "label": "Platform",
+          "kind": "text",
+          "default": "PC"
+        }
+      ],
+      "trigger": {
+        "type": "manual"
+      },
+      "maxCostUsd": 1.0
+    }
+  ]
+}

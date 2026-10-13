@@ -1,0 +1,38 @@
+# Checks that run on every `git commit` and block it if something looks unsafe.
+# One-time setup (see docs/SAFETY.md):
+#   pip install pre-commit
+#   pre-commit install
+# Run on everything by hand:
+#   pre-commit run --all-files
+
+repos:
+  # Scans staged changes for API keys and tokens, including Anthropic keys.
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.30.1
+    hooks:
+      - id: gitleaks
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: detect-private-key
+      - id: check-added-large-files
+        args: ["--maxkb=3000"]
+      - id: check-merge-conflict
+
+  - repo: local
+    hooks:
+      # Refuses any .env file except the .env.example templates.
+      - id: no-env-files
+        name: Block .env files
+        entry: ".env files hold secrets and must never be committed. Unstage it: git restore --staged <file>"
+        language: fail
+        files: '(^|/)\.env(\..+)?$'
+        exclude: '\.env\.example$'
+
+      # Refuses agent workspaces and the local database, which hold your data.
+      - id: no-user-data
+        name: Block workspaces and databases
+        entry: "workspaces/ and database files hold your personal data and must never be committed."
+        language: fail
+        files: '(^|/)workspaces/|\.(db|sqlite3?)$'

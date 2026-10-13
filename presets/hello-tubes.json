@@ -1,0 +1,84 @@
+{
+  "specVersion": "0.2",
+  "id": "hello-tubes",
+  "name": "Hello Tubes",
+  "description": "Practice system for M0 and M1: an overseer, a researcher and a writer. The researcher can hand facts to the writer, but the writer can't start a conversation with the researcher.",
+  "preset": "hello-tubes",
+  "agents": [
+    {
+      "id": "overseer",
+      "name": "Overseer",
+      "kind": "overseer",
+      "template": "overseer",
+      "purpose": "Runs the team. Reads each task, plans the road (who does what, in what order), hands out work along the lines, reviews every result before accepting it, and keeps the progress bar honest. When something keeps going wrong, it suggests a change to the system. It never changes the system on its own: suggestions go to you.",
+      "permissions": {},
+      "position": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "id": "researcher",
+      "name": "Researcher",
+      "template": "researcher",
+      "purpose": "Looks things up on the web and brings back a few solid, checkable facts with links.",
+      "permissions": {
+        "web": "allow"
+      },
+      "kind": "agent",
+      "position": {
+        "x": 0,
+        "y": -240
+      }
+    },
+    {
+      "id": "writer",
+      "name": "Writer",
+      "template": "writer",
+      "purpose": "Turns facts into short, fun, easy-to-read writing. Never makes facts up.",
+      "permissions": {},
+      "kind": "agent",
+      "position": {
+        "x": 0,
+        "y": 240
+      }
+    }
+  ],
+  "lines": [
+    {
+      "id": "o-researcher",
+      "from": "overseer",
+      "to": "researcher"
+    },
+    {
+      "id": "o-writer",
+      "from": "overseer",
+      "to": "writer"
+    },
+    {
+      "id": "l1",
+      "from": "researcher",
+      "to": "writer",
+      "twoWay": false
+    }
+  ],
+  "tasks": [
+    {
+      "id": "fun-fact",
+      "name": "Fun fact",
+      "goal": "Write one surprising, true fun fact about {{topic}} in two sentences.",
+      "inputs": [
+        {
+          "key": "topic",
+          "label": "Topic",
+          "kind": "text",
+          "default": "octopuses"
+        }
+      ],
+      "trigger": {
+        "type": "manual"
+      },
+      "maxCostUsd": 0.1
+    }
+  ]
+}

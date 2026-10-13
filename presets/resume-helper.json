@@ -1,0 +1,173 @@
+{
+  "specVersion": "0.2",
+  "id": "resume-helper",
+  "name": "Resume Application Helper",
+  "description": "Finds open roles that fit, works out what each employer wants, tailors your resume for every one, and submits the applications. By default it asks before each submit.",
+  "preset": "resume-helper",
+  "agents": [
+    {
+      "id": "overseer",
+      "name": "Overseer",
+      "kind": "overseer",
+      "template": "overseer",
+      "purpose": "Runs the team. Reads each task, plans the road (who does what, in what order), hands out work along the lines, reviews every result before accepting it, and keeps the progress bar honest. When something keeps going wrong, it suggests a change to the system. It never changes the system on its own: suggestions go to you.",
+      "permissions": {},
+      "position": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "id": "scout",
+      "name": "Job Scout",
+      "template": "scout",
+      "purpose": "Finds open postings that match your target role and location and shortlists the five best fits, with links.",
+      "permissions": {
+        "web": "allow"
+      },
+      "kind": "agent",
+      "position": {
+        "x": 0,
+        "y": -280
+      }
+    },
+    {
+      "id": "analyst",
+      "name": "Posting Analyst",
+      "template": "analyst",
+      "purpose": "Reads each shortlisted posting and pulls out the skills, keywords and must-haves the employer cares about most.",
+      "permissions": {
+        "web": "allow"
+      },
+      "kind": "agent",
+      "position": {
+        "x": 266,
+        "y": -87
+      }
+    },
+    {
+      "id": "tailor",
+      "name": "Resume Tailor",
+      "template": "writer",
+      "purpose": "Rewrites your resume bullets for each posting using only experience you actually have, and saves one tailored copy per job.",
+      "permissions": {
+        "readFiles": "allow",
+        "writeFiles": "allow"
+      },
+      "kind": "agent",
+      "position": {
+        "x": 165,
+        "y": 227
+      }
+    },
+    {
+      "id": "checker",
+      "name": "Fact Checker",
+      "template": "reviewer",
+      "purpose": "Compares every tailored resume with your original and flags anything exaggerated or made up.",
+      "permissions": {
+        "readFiles": "allow"
+      },
+      "kind": "agent",
+      "position": {
+        "x": -165,
+        "y": 227
+      }
+    },
+    {
+      "id": "applier",
+      "name": "Applier",
+      "template": "applier",
+      "purpose": "Fills in each application form with your details and the checked resume, then submits it.",
+      "permissions": {
+        "web": "allow",
+        "readFiles": "allow",
+        "submitForms": "ask"
+      },
+      "kind": "agent",
+      "position": {
+        "x": -266,
+        "y": -87
+      }
+    }
+  ],
+  "lines": [
+    {
+      "id": "o-scout",
+      "from": "overseer",
+      "to": "scout"
+    },
+    {
+      "id": "o-analyst",
+      "from": "overseer",
+      "to": "analyst"
+    },
+    {
+      "id": "o-tailor",
+      "from": "overseer",
+      "to": "tailor"
+    },
+    {
+      "id": "o-checker",
+      "from": "overseer",
+      "to": "checker"
+    },
+    {
+      "id": "o-applier",
+      "from": "overseer",
+      "to": "applier"
+    },
+    {
+      "id": "l1",
+      "from": "scout",
+      "to": "analyst",
+      "twoWay": false
+    },
+    {
+      "id": "l2",
+      "from": "analyst",
+      "to": "tailor",
+      "twoWay": false
+    },
+    {
+      "id": "l3",
+      "from": "tailor",
+      "to": "checker"
+    },
+    {
+      "id": "l4",
+      "from": "checker",
+      "to": "applier",
+      "twoWay": false
+    }
+  ],
+  "tasks": [
+    {
+      "id": "prep-applications",
+      "name": "Prep applications",
+      "goal": "Find five open {{role}} roles in {{location}}, tailor {{resume}} for each one, and submit the applications once the Fact Checker has cleared them.",
+      "inputs": [
+        {
+          "key": "role",
+          "label": "Target role",
+          "kind": "text"
+        },
+        {
+          "key": "location",
+          "label": "Location",
+          "kind": "text",
+          "default": "Remote"
+        },
+        {
+          "key": "resume",
+          "label": "Your resume",
+          "kind": "file"
+        }
+      ],
+      "trigger": {
+        "type": "manual"
+      },
+      "maxCostUsd": 1.5
+    }
+  ]
+}

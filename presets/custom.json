@@ -1,0 +1,22 @@
+{
+  "specVersion": "0.2",
+  "id": "custom",
+  "name": "Custom System",
+  "description": "Start from scratch: an overseer and you. Add agents from the library, draw lines, set permissions, add tasks.",
+  "agents": [
+    {
+      "id": "overseer",
+      "name": "Overseer",
+      "kind": "overseer",
+      "template": "overseer",
+      "purpose": "Runs the team. Reads each task, plans the road (who does what, in what order), hands out work along the lines, reviews every result before accepting it, and keeps the progress bar honest. When something keeps going wrong, it suggests a change to the system. It never changes the system on its own: suggestions go to you.",
+      "permissions": {},
+      "position": {
+        "x": 0,
+        "y": 0
+      }
+    }
+  ],
+  "lines": [],
+  "tasks": []
+}

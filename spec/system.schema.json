@@ -1,0 +1,205 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Tuberium system spec",
+  "description": "One document that fully describes an agent system: its agents (circles/houses), its lines (who can talk to who) and its tasks. The map edits it, the backend runs it, a preset is a saved copy of it. No theme data lives here.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["specVersion", "id", "name", "agents", "lines", "tasks"],
+  "properties": {
+    "specVersion": { "const": "0.2" },
+    "id": { "$ref": "#/$defs/slug" },
+    "name": { "type": "string", "minLength": 1 },
+    "description": { "type": "string" },
+    "preset": {
+      "type": "string",
+      "description": "Id of the preset this system was copied from, if any. Custom systems leave it out."
+    },
+    "agents": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/agent" }
+    },
+    "lines": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/line" }
+    },
+    "tasks": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/task" }
+    }
+  },
+  "$defs": {
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]*$"
+    },
+    "agentId": {
+      "description": "\"you\" is reserved for the human circle the app always draws next to the overseer.",
+      "allOf": [
+        { "$ref": "#/$defs/slug" },
+        { "not": { "const": "you" } }
+      ]
+    },
+    "position": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["x", "y"],
+      "properties": {
+        "x": { "type": "number" },
+        "y": { "type": "number" }
+      }
+    },
+    "level": {
+      "enum": ["off", "ask", "allow"],
+      "description": "off: the agent cannot do it. ask: it must ask you first, every time. allow: it can do it on its own."
+    },
+    "permissions": {
+      "type": "object",
+      "description": "Anything left out is off.",
+      "additionalProperties": false,
+      "properties": {
+        "web": { "$ref": "#/$defs/level", "description": "Search and read web pages." },
+        "readFiles": { "$ref": "#/$defs/level", "description": "Read files in this system's workspace folder." },
+        "writeFiles": { "$ref": "#/$defs/level", "description": "Create and edit files in this system's workspace folder." },
+        "runCode": { "$ref": "#/$defs/level", "description": "Run code, e.g. Python for data cleaning." },
+        "readEmail": { "$ref": "#/$defs/level", "description": "Read your inbox." },
+        "sendEmail": { "$ref": "#/$defs/level", "description": "Send email as you." },
+        "postSocial": { "$ref": "#/$defs/level", "description": "Publish posts to your social accounts." },
+        "submitForms": { "$ref": "#/$defs/level", "description": "Fill in and submit online forms as you, e.g. job applications." },
+        "trade": { "$ref": "#/$defs/level", "description": "Buy, sell and move money in your connected brokerage account, within the trade caps." }
+      }
+    },
+    "agent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "kind", "purpose", "permissions", "position"],
+      "properties": {
+        "id": { "$ref": "#/$defs/agentId" },
+        "name": { "type": "string", "minLength": 1 },
+        "kind": {
+          "enum": ["overseer", "agent"],
+          "description": "Every system has exactly one overseer."
+        },
+        "template": {
+          "type": "string",
+          "description": "Which agent from the library this came from (researcher, writer, ...). Themes use it to pick the house and character."
+        },
+        "purpose": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 600,
+          "description": "Short paragraph: what this agent is for. Shown in the agent panel and given to the agent as its role."
+        },
+        "model": {
+          "type": "string",
+          "description": "Optional model id. Leave out to use the app default."
+        },
+        "permissions": { "$ref": "#/$defs/permissions" },
+        "limits": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "maxTurns": { "type": "integer", "minimum": 1 },
+            "maxCostUsd": { "type": "number", "exclusiveMinimum": 0 },
+            "maxTradeUsd": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "description": "Largest single trade this agent may place. The daily cap in backend/.env applies on top."
+            }
+          }
+        },
+        "position": { "$ref": "#/$defs/position" }
+      }
+    },
+    "line": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "from", "to"],
+      "description": "A line means these two agents can talk and hand each other files. No line, no talking: the engine blocks it.",
+      "properties": {
+        "id": { "$ref": "#/$defs/slug" },
+        "from": { "$ref": "#/$defs/agentId" },
+        "to": { "$ref": "#/$defs/agentId" },
+        "twoWay": {
+          "type": "boolean",
+          "default": true,
+          "description": "false: only `from` can start a conversation; `to` can still answer."
+        }
+      }
+    },
+    "inputField": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key", "label", "kind"],
+      "properties": {
+        "key": { "type": "string", "pattern": "^[a-zA-Z][a-zA-Z0-9_]*$" },
+        "label": { "type": "string" },
+        "kind": { "enum": ["text", "longtext", "file"] },
+        "default": { "type": "string" }
+      }
+    },
+    "trigger": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type"],
+          "description": "On demand: runs when you press the button.",
+          "properties": { "type": { "const": "manual" } }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "cron", "timezone"],
+          "description": "Scheduled: runs at set times.",
+          "properties": {
+            "type": { "const": "schedule" },
+            "cron": {
+              "type": "string",
+              "description": "Standard 5-field cron: minute hour day-of-month month day-of-week"
+            },
+            "timezone": {
+              "type": "string",
+              "description": "IANA time zone, e.g. America/New_York"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "watch", "checkEveryMinutes"],
+          "description": "Always on: a cheap check (no AI) runs every few minutes. The agents only wake up when it finds something.",
+          "properties": {
+            "type": { "const": "always" },
+            "watch": { "enum": ["newEmail", "newFile", "webChange"] },
+            "checkEveryMinutes": { "type": "integer", "minimum": 1 }
+          }
+        }
+      ]
+    },
+    "task": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "goal", "trigger"],
+      "description": "A job for the system. It always goes to the overseer first, who plans the road and hands out the work.",
+      "properties": {
+        "id": { "$ref": "#/$defs/slug" },
+        "name": { "type": "string", "minLength": 1 },
+        "goal": {
+          "type": "string",
+          "description": "What done looks like. May use {{key}} for any of this task's inputs."
+        },
+        "inputs": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/inputField" }
+        },
+        "trigger": { "$ref": "#/$defs/trigger" },
+        "maxCostUsd": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "description": "Hard spending cap for one run of this task, across all agents."
+        }
+      }
+    }
+  }
+}
