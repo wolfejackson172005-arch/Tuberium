@@ -1,3 +1,4 @@
+import { formatUsd } from "../run/cost";
 import { REVIEW_MARKS } from "../spec/permissions";
 import type { AgentRunState } from "../run/useRun";
 import { useTheme } from "../themes/useTheme";
@@ -10,7 +11,7 @@ interface Props {
 
 export function StatusCard({ art, name, run }: Props) {
   const theme = useTheme();
-  const { status, step, steps, doing, lastReview } = run;
+  const { status, step, steps, doing, lastReview, costUsd } = run;
   const hasProgress = step !== undefined && steps !== undefined && steps > 0;
   const fraction = hasProgress ? Math.min(1, step / steps) : 0;
 
@@ -19,6 +20,11 @@ export function StatusCard({ art, name, run }: Props) {
       <div className="status-card__header">
         <span className="status-card__icon">{art}</span>
         <span className="status-card__name">{name}</span>
+        {costUsd !== undefined && (
+          <span className="status-card__cost" title="Cost this run">
+            {formatUsd(costUsd)}
+          </span>
+        )}
         {lastReview && (
           <span
             className={`status-card__review status-card__review--${lastReview.verdict}`}

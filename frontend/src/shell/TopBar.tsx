@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { formatUsd } from "../run/cost";
 import type { RunStatus } from "../run/useRun";
 import type { SystemSummary } from "../spec/types";
 
@@ -25,9 +26,10 @@ interface Props {
   taskName?: string;
   onRun: () => void;
   runStatus: RunStatus;
+  costUsd?: number;
 }
 
-export function TopBar({ systems, systemId, onSystemChange, taskName, onRun, runStatus }: Props) {
+export function TopBar({ systems, systemId, onSystemChange, taskName, onRun, runStatus, costUsd }: Props) {
   const now = useClock();
   const running = runStatus === "running";
 
@@ -67,6 +69,11 @@ export function TopBar({ systems, systemId, onSystemChange, taskName, onRun, run
           <span className="topbar__dot" />
           {STATUS_TEXT[runStatus]}
         </span>
+        {costUsd !== undefined && (
+          <span className="topbar__cost" title="Total cost of the last run">
+            {formatUsd(costUsd)}
+          </span>
+        )}
       </div>
 
       <div className="topbar__playback" title="Pause and play arrive in M2">

@@ -155,6 +155,13 @@
   white-space: nowrap;
 }
 
+.status-card__cost {
+  flex-shrink: 0;
+  font-size: var(--font-size-xs);
+  color: var(--cost-text);
+  font-variant-numeric: tabular-nums;
+}
+
 .status-card__review {
   width: var(--review-size);
   height: var(--review-size);
@@ -252,6 +259,13 @@
 .result-card__title {
   font-weight: var(--font-weight-bold);
   margin-bottom: var(--space-1);
+}
+
+.result-card__cost {
+  margin-top: var(--space-1);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  font-variant-numeric: tabular-nums;
 }
 
 /* ---- lines: one segment per spec line ---- */

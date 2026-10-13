@@ -69,13 +69,14 @@ export function Map({ system, run, selectedId, onSelect }: Props) {
               selected: selectedId === YOU_ID,
               runStatus: run.runStatus,
               result: run.result,
+              costUsd: run.costUsd,
               error: run.error,
             },
           };
         }
         return node;
       }),
-    [nodes, run.agents, run.runStatus, run.result, run.error, selectedId],
+    [nodes, run.agents, run.runStatus, run.result, run.costUsd, run.error, selectedId],
   );
 
   const edges = useMemo((): PathEdgeType[] => {

@@ -1,5 +1,7 @@
 import { useEffect } from "react";
+import { formatUsd } from "../run/cost";
 import { agentsInEvent, describeEvent, type RunEvent } from "../run/events";
+import type { AgentRunState } from "../run/useRun";
 import { reachedBy, startsTalkWith } from "../spec/graph";
 import { PERMISSIONS } from "../spec/permissions";
 import type { Agent, Level, System } from "../spec/types";
@@ -26,11 +28,12 @@ function names(agents: Agent[]): string {
 interface Props {
   system: System;
   agentId: string;
+  run?: AgentRunState;
   events: RunEvent[];
   onClose: () => void;
 }
 
-export function AgentPanel({ system, agentId, events, onClose }: Props) {
+export function AgentPanel({ system, agentId, run, events, onClose }: Props) {
   const theme = useTheme();
   useEscape(onClose);
 
@@ -85,6 +88,15 @@ export function AgentPanel({ system, agentId, events, onClose }: Props) {
       </section>
 
       <section className="side-panel__section">
+        <h3>Cost this run</h3>
+        {run?.costUsd !== undefined ? (
+          <p className="side-panel__cost">{formatUsd(run.costUsd)}</p>
+        ) : (
+          <p className="side-panel__muted">No cost yet</p>
+        )}
+      </section>
+
+      <section className="side-panel__section">
         <h3>Purpose</h3>
         <p>{agent.purpose}</p>
       </section>
@@ -108,7 +120,7 @@ export function AgentPanel({ system, agentId, events, onClose }: Props) {
   );
 }
 
-export function YouPanel({ result, onClose }: { result?: string; onClose: () => void }) {
+export function YouPanel({ result, costUsd, onClose }: { result?: string; costUsd?: number; onClose: () => void }) {
   useEscape(onClose);
   return (
     <aside className="side-panel">
@@ -121,6 +133,7 @@ export function YouPanel({ result, onClose }: { result?: string; onClose: () => 
       <section className="side-panel__section">
         <p>This is you. Approval requests and results land here.</p>
         {result && <p className="side-panel__muted">Last result: {result}</p>}
+        {costUsd !== undefined && <p className="side-panel__cost">Run cost: {formatUsd(costUsd)}</p>}
       </section>
     </aside>
   );
