@@ -1,0 +1,348 @@
+/* Every color, font and size comes from the active theme pack's CSS variables. */
+
+.map {
+  position: absolute;
+  inset: 0;
+  background-color: var(--map-bg);
+  background-image: radial-gradient(var(--map-dot) var(--dot-size), transparent var(--dot-size));
+  background-size: var(--dot-spacing) var(--dot-spacing);
+}
+
+/* ---- homes ---- */
+
+.home {
+  position: relative;
+  width: var(--home-size);
+  height: var(--home-size);
+  border-radius: 50%;
+  background: var(--home-bg);
+  border: var(--home-border-width) solid var(--home-border);
+  box-shadow: var(--shadow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  cursor: pointer;
+  transition: box-shadow var(--transition-fast), border-color var(--transition-fast);
+}
+
+.home--overseer {
+  width: var(--overseer-home-size);
+  height: var(--overseer-home-size);
+  background: var(--overseer-home-bg);
+  border-color: var(--overseer-home-border);
+}
+
+.home--you {
+  background: var(--you-home-bg);
+  border-color: var(--you-home-border);
+}
+
+.home--selected {
+  border-color: var(--home-selected);
+  box-shadow: 0 0 0 var(--home-border-width) var(--home-selected), var(--shadow);
+}
+
+.home__art {
+  font-size: var(--home-art-size);
+  line-height: 1;
+  user-select: none;
+}
+
+.home--overseer .home__art {
+  font-size: var(--overseer-art-size);
+}
+
+.home .home__handle {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.home__below {
+  position: absolute;
+  top: calc(100% + var(--space-1));
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  white-space: nowrap;
+}
+
+.home__name {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--card-text);
+  background: var(--card-bg);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+}
+
+.home__badges {
+  display: flex;
+  gap: var(--space-1);
+}
+
+.badge {
+  position: relative;
+  width: var(--badge-size);
+  height: var(--badge-size);
+  border-radius: 50%;
+  background: var(--badge-bg);
+  border: var(--badge-border-width) solid var(--badge-border);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--badge-font-size);
+  transition: box-shadow var(--transition-fast), transform var(--transition-fast);
+}
+
+.badge--active {
+  box-shadow: 0 0 var(--glow-size) var(--glow-size) var(--badge-glow);
+  transform: scale(1.25);
+}
+
+.badge__ask-dot {
+  position: absolute;
+  top: calc(var(--badge-border-width) * -1);
+  right: calc(var(--badge-border-width) * -1);
+  width: var(--ask-dot-size);
+  height: var(--ask-dot-size);
+  border-radius: 50%;
+  background: var(--ask-dot);
+}
+
+/* ---- status card, above the home without changing the home's measured size ---- */
+
+.status-card {
+  position: absolute;
+  bottom: calc(100% + var(--card-gap));
+  left: 50%;
+  transform: translateX(-50%);
+  width: var(--card-width);
+  background: var(--card-bg);
+  color: var(--card-text);
+  border-radius: var(--radius-md);
+  padding: var(--space-2) var(--space-3);
+  box-shadow: var(--shadow);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  cursor: default;
+}
+
+.status-card__header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.status-card__icon {
+  font-size: var(--font-size-md);
+}
+
+.status-card__name {
+  flex: 1;
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.status-card__review {
+  width: var(--review-size);
+  height: var(--review-size);
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  color: var(--card-bg);
+}
+
+.status-card__review--accepted {
+  background: var(--review-accepted);
+}
+
+.status-card__review--sent-back {
+  background: var(--review-sent-back);
+}
+
+.status-card__progress-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.status-card__bar {
+  flex: 1;
+  height: var(--progress-height);
+  background: var(--progress-bg);
+  border-radius: var(--progress-height);
+  overflow: hidden;
+}
+
+.status-card__fill {
+  height: 100%;
+  background: var(--progress-fill);
+  border-radius: var(--progress-height);
+  transition: width var(--transition-fast);
+}
+
+.status-card__count {
+  font-size: var(--font-size-xs);
+  color: var(--card-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.status-card__doing {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--font-size-xs);
+  color: var(--card-muted);
+  min-width: 0;
+}
+
+.status-card__status {
+  flex-shrink: 0;
+  background: var(--status-pill-bg);
+  color: var(--card-text);
+  padding: 0 var(--space-2);
+  border-radius: var(--radius-sm);
+}
+
+.status-card__doing-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ---- the result card next to You ---- */
+
+.result-card {
+  position: absolute;
+  top: calc(100% + var(--result-gap));
+  left: 50%;
+  z-index: 1;
+  transform: translateX(-50%);
+  width: var(--card-width);
+  background: var(--result-bg);
+  color: var(--result-text);
+  border: var(--badge-border-width) solid var(--result-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-2) var(--space-3);
+  box-shadow: var(--shadow);
+  box-sizing: border-box;
+  font-size: var(--font-size-sm);
+  cursor: default;
+}
+
+.result-card--error {
+  border-color: var(--blocked-color);
+}
+
+.result-card__title {
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--space-1);
+}
+
+/* ---- lines: one segment per spec line ---- */
+
+.path-edge__border,
+.path-edge__line {
+  fill: none;
+  stroke-linecap: round;
+  transition: stroke var(--transition-fast), stroke-width var(--transition-fast);
+}
+
+.path-edge__border {
+  stroke: var(--line-border);
+  stroke-width: var(--line-border-width);
+}
+
+.path-edge__line {
+  stroke: var(--line-color);
+  stroke-width: var(--line-width);
+  stroke-dasharray: var(--line-dash);
+}
+
+.path-edge--lit .path-edge__border {
+  stroke: var(--line-highlight);
+  stroke-width: var(--line-highlight-width);
+}
+
+/* React Flow strokes every edge path by default; the arrow is a filled shape, scaled up from a unit triangle. */
+.react-flow__edge .path-edge__arrow {
+  fill: var(--line-border);
+  stroke: none;
+  transform: scale(var(--arrow-scale));
+}
+
+/* ---- travelers and blocked flashes, in map coordinates ---- */
+
+.traveler {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transition: transform var(--travel-duration) ease-in-out;
+  pointer-events: none;
+  z-index: 1000;
+}
+
+.traveler__body {
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.traveler__critter {
+  font-size: var(--traveler-size);
+  line-height: 1;
+}
+
+.traveler__bubble {
+  max-width: var(--bubble-max-width);
+  background: var(--bubble-bg);
+  color: var(--bubble-text);
+  border: var(--badge-border-width) solid var(--bubble-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-1) var(--space-2);
+  font-size: var(--font-size-xs);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-shadow: var(--shadow);
+}
+
+.blocked-layer {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.blocked-line {
+  stroke: var(--blocked-color);
+  stroke-width: var(--blocked-width);
+  stroke-dasharray: var(--blocked-dash);
+  animation: blocked-blink 0.5s steps(2) infinite;
+}
+
+@keyframes blocked-blink {
+  50% {
+    opacity: 0.2;
+  }
+}

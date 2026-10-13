@@ -80,6 +80,7 @@ type ThemePack = {
   home: "cottage" | "circle" | "machine" | "treehouse" | "lilypad";
   line: "path" | "plain" | "conveyor" | "vine" | "reeds";
   skins: Record<string, Skin>;           // keyed by template, plus "overseer", "you" and "default"
+  traveler: string;                      // the character that walks the lines
   carrying: { message: string; file: string };
   statusWords: Record<AgentStatus, string>;
 };

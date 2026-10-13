@@ -27,8 +27,8 @@
       },
       "kind": "agent",
       "position": {
-        "x": 0,
-        "y": -240
+        "x": 320,
+        "y": -220
       }
     },
     {
@@ -39,8 +39,8 @@
       "permissions": {},
       "kind": "agent",
       "position": {
-        "x": 0,
-        "y": 240
+        "x": 320,
+        "y": 220
       }
     }
   ],

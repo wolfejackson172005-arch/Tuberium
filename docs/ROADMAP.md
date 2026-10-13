@@ -12,17 +12,17 @@ The agent-builder space is crowded (n8n, Zapier, Make, Gumloop, Lindy, Relay), a
 
 Goal: open Hello Tubes, press Run, watch the overseer plan, travelers move along lines, progress bars fill. No AI, no API key.
 
-- [ ] GitHub repo with the starter kit committed
-- [ ] Safety setup: `backend/.env` from the template, pre-commit installed (see [SAFETY.md](SAFETY.md))
-- [ ] Backend: FastAPI, spec models, `GET /systems/{id}`
-- [ ] Engine with FakeRunner, scripted run following the event table
-- [ ] `POST /runs` and `GET /runs/{id}/events` (SSE)
-- [ ] Frontend: app shell (sidebar, top bar) and a map that draws homes and paths from the spec, plus your home next to the overseer
-- [ ] Status card above every home: icon, name, progress bar with step count, "doing" line; permission badges
-- [ ] Everything styled through the Tuberian theme pack (CSS variables, emoji art), aiming at `docs/img/tuberian-reference.png`
-- [ ] Click an agent: panel with name, connections, permissions, agent, purpose, work history
-- [ ] Run button: statuses and progress bars update live; travelers walk the paths with speech bubbles and files
-- [ ] Stretch: preset picker (any file in `presets/` runs on the fake engine), second theme (Swamp) and a theme switcher
+- [x] GitHub repo with the starter kit committed
+- [x] Safety setup: `backend/.env` from the template, pre-commit installed (see [SAFETY.md](SAFETY.md))
+- [x] Backend: FastAPI, spec models, `GET /systems/{id}`
+- [x] Engine with FakeRunner, scripted run following the event table
+- [x] `POST /runs` and `GET /runs/{id}/events` (SSE)
+- [x] Frontend: app shell (sidebar, top bar) and a map that draws homes and paths from the spec, plus your home next to the overseer
+- [x] Status card above every home: icon, name, progress bar with step count, "doing" line; permission badges
+- [x] Everything styled through the Tuberian theme pack (CSS variables, emoji art), aiming at `docs/img/tuberian-reference.png`
+- [x] Click an agent: panel with name, connections, permissions, agent, purpose, work history
+- [x] Run button: statuses and progress bars update live; travelers walk the paths with speech bubbles and files
+- [x] Stretch: preset picker (any file in `presets/` runs on the fake engine), second theme (Swamp) and a theme switcher
 
 Step-by-step prompts: [M0-prompts.md](M0-prompts.md).
 
