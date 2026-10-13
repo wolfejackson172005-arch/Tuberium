@@ -1,0 +1,137 @@
+.side-panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: var(--panel-width);
+  background: var(--panel-bg);
+  color: var(--panel-text);
+  box-shadow: var(--shadow);
+  overflow-y: auto;
+  padding: var(--space-4);
+  box-sizing: border-box;
+  z-index: 20;
+  animation: panel-in var(--transition-fast) ease-out;
+}
+
+@keyframes panel-in {
+  from {
+    transform: translateX(100%);
+  }
+}
+
+.side-panel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-3);
+}
+
+.side-panel h2 {
+  margin: 0;
+  font-size: var(--font-size-lg);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.side-panel h3 {
+  margin: 0 0 var(--space-2);
+  font-size: var(--font-size-sm);
+  text-transform: uppercase;
+  color: var(--panel-muted);
+}
+
+.side-panel p {
+  margin: 0 0 var(--space-1);
+  font-size: var(--font-size-md);
+}
+
+.side-panel__art {
+  font-size: var(--font-size-xl);
+}
+
+.side-panel__close {
+  background: none;
+  border: none;
+  color: var(--panel-text);
+  font-size: var(--font-size-lg);
+  cursor: pointer;
+}
+
+.side-panel__section {
+  background: var(--panel-section);
+  border-radius: var(--radius-md);
+  padding: var(--space-3);
+  margin-bottom: var(--space-3);
+}
+
+.side-panel__muted {
+  color: var(--panel-muted);
+}
+
+.permission-list,
+.history {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.permission-list__item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--font-size-sm);
+}
+
+.permission-list__text {
+  flex: 1;
+}
+
+.chip {
+  flex-shrink: 0;
+  padding: 0 var(--space-2);
+  border-radius: var(--radius-sm);
+  color: var(--chip-text);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+}
+
+.chip--off {
+  background: var(--chip-off);
+}
+
+.chip--ask {
+  background: var(--chip-ask);
+}
+
+.chip--allow {
+  background: var(--chip-allow);
+}
+
+.history__item {
+  font-size: var(--font-size-sm);
+}
+
+.history__time {
+  display: block;
+  color: var(--panel-muted);
+  font-size: var(--font-size-xs);
+}
+
+.theme-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.theme-list__item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--font-size-md);
+  cursor: pointer;
+}

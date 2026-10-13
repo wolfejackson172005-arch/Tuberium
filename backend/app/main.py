@@ -9,7 +9,7 @@ from pydantic import BaseModel
 
 from app.engine.engine import Engine
 from app.models import System
-from app.presets import is_valid_id, load_system
+from app.presets import is_valid_id, list_systems, load_system
 from app.runners.fake import FakeRunner
 from app.runs import RunStore
 from app.settings import get_settings
@@ -48,6 +48,17 @@ def make_engine() -> Engine:
 @app.get("/health")
 async def health() -> dict[str, str]:
     return {"status": "ok", "runner": settings.tuberium_runner}
+
+
+class SystemSummary(BaseModel):
+    id: str
+    name: str
+    description: str | None = None
+
+
+@app.get("/systems")
+async def get_systems() -> list[SystemSummary]:
+    return [SystemSummary(id=s.id, name=s.name, description=s.description) for s in list_systems()]
 
 
 @app.get("/systems/{system_id}", response_model=System, response_model_exclude_none=True)

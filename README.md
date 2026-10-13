@@ -4,7 +4,7 @@ A game-like, themed map of an AI agent team. Agents live in houses, paths show w
 
 ![Tuberian reference art](docs/img/tuberian-reference.png)
 
-**Status:** pre-M0. The repo holds the design docs, the system spec and nine preset systems. See [docs/ROADMAP.md](docs/ROADMAP.md).
+**Status:** M0 done. Any preset runs on fake agents (no AI, no API key) and plays out live on the map. Next is M1, real agents. See [docs/ROADMAP.md](docs/ROADMAP.md).
 
 ## Read these first
 
