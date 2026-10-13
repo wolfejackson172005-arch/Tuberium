@@ -9,6 +9,7 @@ from pydantic import SecretStr, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 BACKEND_DIR = Path(__file__).resolve().parent.parent
+REPO_DIR = BACKEND_DIR.parent
 ENV_FILE = BACKEND_DIR / ".env"
 
 
@@ -43,6 +44,12 @@ class Settings(BaseSettings):
         if isinstance(value, str):
             return value.strip().lower()
         return value
+
+    @property
+    def workspaces_path(self) -> Path:
+        """The workspaces folder. A relative TUBERIUM_WORKSPACES_DIR counts from the repo root."""
+        path = Path(self.tuberium_workspaces_dir)
+        return path if path.is_absolute() else (REPO_DIR / path).resolve()
 
     def validate_runner_key(self) -> None:
         if self.tuberium_runner != "claude":

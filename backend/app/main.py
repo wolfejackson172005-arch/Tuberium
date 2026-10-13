@@ -10,11 +10,23 @@ from pydantic import BaseModel
 from app.engine.engine import Engine
 from app.models import System
 from app.presets import is_valid_id, list_systems, load_system
+from app.runners.base import Runner
 from app.runners.fake import FakeRunner
 from app.runs import RunStore
 from app.settings import get_settings
 
 settings = get_settings()
+
+
+def make_runner() -> Runner:
+    if settings.tuberium_runner == "claude":
+        from app.runners.claude import ClaudeRunner
+
+        return ClaudeRunner(settings.workspaces_path, settings.tuberium_default_model)
+    return FakeRunner()
+
+
+runner = make_runner()
 
 app = FastAPI(title="Tuberium")
 
@@ -40,9 +52,7 @@ class RunStarted(BaseModel):
 
 
 def make_engine() -> Engine:
-    if settings.tuberium_runner != "fake":
-        raise HTTPException(status_code=501, detail="The Claude runner arrives in M1. Use TUBERIUM_RUNNER=fake.")
-    return Engine(FakeRunner())
+    return Engine(runner)
 
 
 @app.get("/health")
