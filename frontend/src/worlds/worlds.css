@@ -416,43 +416,104 @@
   display: block;
   width: 100%;
   height: 100%;
+  overflow: visible;
 }
 
 .scene__sky {
   fill: var(--scene-sky);
 }
 
+.scene__hill {
+  fill: var(--scene-hill);
+}
+
 .scene__ground {
   fill: var(--scene-ground);
 }
 
+.scene__path-edge,
 .scene__path {
   fill: none;
+  stroke-linecap: round;
+}
+
+.scene__path-edge {
+  stroke: var(--scene-path-edge);
+  stroke-width: 11;
+}
+
+.scene__path {
   stroke: var(--scene-path);
   stroke-width: 7;
-  stroke-linecap: round;
+}
+
+.scene__shadow {
+  fill: var(--scene-shadow);
 }
 
 .scene__wall {
   fill: var(--scene-wall);
 }
 
+.scene__trim,
+.scene__chimney {
+  fill: var(--scene-trim);
+}
+
 .scene__roof {
   fill: var(--scene-roof);
 }
 
-.scene__door {
+.scene__roof-edge {
+  fill: var(--scene-roof-edge);
+}
+
+.scene__door,
+.scene__trunk {
   fill: var(--scene-door);
 }
 
-.scene__tree {
+.scene__window {
+  fill: var(--scene-window);
+  stroke: var(--scene-trim);
+  stroke-width: 1.2;
+}
+
+.scene__pine {
+  fill: var(--scene-pine);
+}
+
+.scene__bush {
   fill: var(--scene-tree);
+}
+
+.scene__rock {
+  fill: var(--scene-rock);
+}
+
+.scene__tuft {
+  fill: none;
+  stroke: var(--scene-tuft);
+  stroke-width: 1.2;
+  stroke-linejoin: round;
 }
 
 .scene__critter {
   fill: var(--scene-critter);
-  stroke: var(--scene-door);
-  stroke-width: 1;
+  stroke: var(--scene-outline);
+  stroke-width: 0.8;
+}
+
+.scene__shades {
+  fill: var(--scene-shades);
+}
+
+.scene__critter-body--1 {
+  fill: var(--scene-critter-body-1);
+}
+
+.scene__critter-body--2 {
+  fill: var(--scene-critter-body-2);
 }
 
 .scene--blank .scene__sky {
@@ -463,9 +524,13 @@
   fill: var(--scene-blank-ground);
 }
 
-.scene--blank .scene__path {
+.scene--blank .scene__path-edge {
   stroke: var(--surface-dashed);
   stroke-width: 3;
+}
+
+.scene--blank .scene__house {
+  opacity: 0.6;
 }
 
 .world-card__theme {
