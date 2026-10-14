@@ -120,9 +120,128 @@
   background: var(--blocked-color);
 }
 
+.topbar__cost {
+  font-weight: var(--font-weight-bold);
+  color: var(--cost-text);
+  font-variant-numeric: tabular-nums;
+}
+
 .topbar__playback {
   display: flex;
   gap: var(--space-1);
+}
+
+/* ---- inputs form before a run ---- */
+
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--modal-backdrop);
+}
+
+.modal__card {
+  width: var(--modal-width);
+  max-width: calc(100vw - 2 * var(--space-4));
+  max-height: calc(100vh - 2 * var(--space-4));
+  overflow-y: auto;
+  box-sizing: border-box;
+  background: var(--panel-bg);
+  color: var(--panel-text);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  animation: modal-in var(--transition-fast) ease-out;
+}
+
+@keyframes modal-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+}
+
+.modal__title {
+  margin: 0;
+  font-size: var(--font-size-lg);
+}
+
+.modal__goal {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: var(--panel-muted);
+}
+
+.modal__field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.modal__label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+}
+
+.modal__input {
+  font: inherit;
+  font-size: var(--font-size-md);
+  background: var(--field-bg);
+  color: var(--field-text);
+  border: var(--badge-border-width) solid var(--field-border);
+  border-radius: var(--radius-sm);
+  padding: var(--space-2);
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.modal__input:focus {
+  outline: none;
+  border-color: var(--chrome-accent);
+}
+
+.modal__input:disabled {
+  opacity: 0.6;
+}
+
+.modal__input--long {
+  min-height: var(--textarea-height);
+  resize: vertical;
+}
+
+.modal__note {
+  font-size: var(--font-size-xs);
+  color: var(--panel-muted);
+}
+
+.modal__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+.modal__button {
+  font: inherit;
+  font-size: var(--font-size-md);
+  background: var(--chrome-button-bg);
+  color: var(--chrome-text);
+  border: var(--badge-border-width) solid var(--chrome-border);
+  border-radius: var(--radius-sm);
+  padding: var(--space-1) var(--space-4);
+  cursor: pointer;
+}
+
+.modal__button--primary {
+  background: var(--chrome-accent);
+  border-color: var(--chrome-accent);
+  font-weight: var(--font-weight-bold);
 }
 
 /* ---- sidebar ---- */

@@ -13,6 +13,7 @@ export interface AgentRunState {
   steps?: number;
   activePermission?: PermissionName;
   lastReview?: { verdict: Verdict; note: string };
+  costUsd?: number;
 }
 
 export interface Traveler {
@@ -42,6 +43,7 @@ interface RunState {
   roadLit: boolean;
   blocked: BlockedFlash[];
   result?: string;
+  costUsd?: number;
   error?: string;
 }
 
@@ -82,13 +84,14 @@ function applyEvent(state: RunState, event: RunEvent): RunState {
     case "overseer.plan":
       return { ...next, road: event.data.steps.map((s) => s.agentId), roadLit: true };
     case "agent.status": {
-      const { agentId, status, doing, step, steps } = event.data;
+      const { agentId, status, doing, step, steps, costUsd } = event.data;
       const previous = next.agents[agentId];
       return updateAgent(next, agentId, {
         status,
         doing,
         step: step ?? previous?.step,
         steps: steps ?? previous?.steps,
+        costUsd: costUsd ?? previous?.costUsd,
       });
     }
     case "agent.action":
@@ -117,6 +120,7 @@ function applyEvent(state: RunState, event: RunEvent): RunState {
         ...next,
         runStatus: event.data.status === "done" ? "done" : "failed",
         result: event.data.result,
+        costUsd: event.data.costUsd,
         travelers: [],
       };
     default:
@@ -242,6 +246,7 @@ export function useRun() {
     roadLit: state.roadLit,
     blocked: state.blocked,
     result: state.result,
+    costUsd: state.costUsd,
     error: state.error,
   };
 }

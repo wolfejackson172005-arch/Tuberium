@@ -10,7 +10,15 @@ export type RunEventBody =
   | { type: "overseer.plan"; data: { steps: { agentId: string; job: string }[] } }
   | {
       type: "agent.status";
-      data: { agentId: string; status: AgentStatus; doing?: string; step?: number; steps?: number };
+      // costUsd: that agent's cumulative cost this run, when the runner knows it.
+      data: {
+        agentId: string;
+        status: AgentStatus;
+        doing?: string;
+        step?: number;
+        steps?: number;
+        costUsd?: number;
+      };
     }
   | { type: "agent.action"; data: { agentId: string; permission: PermissionName; label: string } }
   | {

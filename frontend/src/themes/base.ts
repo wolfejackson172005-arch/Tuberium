@@ -21,6 +21,8 @@ export const baseVars: Record<string, string> = {
   "--sidebar-width": "150px",
   "--topbar-height": "64px",
   "--panel-width": "360px",
+  "--modal-width": "440px",
+  "--textarea-height": "96px",
 
   "--dot-size": "1.5px",
   "--dot-spacing": "26px",

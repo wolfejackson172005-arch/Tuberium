@@ -13,3 +13,7 @@ class Runner(Protocol):
         """The agent handles one incoming message. It may call tools from `kit`,
         including talk_to(), which the engine routes. The last item is its Reply."""
         ...
+
+    async def close_run(self, run_id: str) -> None:
+        """The run is over: free anything kept for it. The engine always calls this."""
+        ...

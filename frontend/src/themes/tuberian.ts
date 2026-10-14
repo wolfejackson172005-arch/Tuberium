@@ -64,6 +64,12 @@ export const tuberian: ThemePack = {
     "--result-border": "#5b5bd6",
     "--notice-bg": "#1f2a3a",
     "--notice-text": "#f4f1ea",
+
+    "--cost-text": "#ffd76a",
+    "--modal-backdrop": "rgba(20, 28, 40, 0.55)",
+    "--field-bg": "#fffaf0",
+    "--field-text": "#1e2633",
+    "--field-border": "#c9a46c",
   },
   home: "cottage",
   line: "path",

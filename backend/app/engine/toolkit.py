@@ -24,6 +24,10 @@ class Toolkit:
         self.depth = depth
 
     @property
+    def run_id(self) -> str:
+        return self._ctx.run_id
+
+    @property
     def system(self) -> System:
         return self._ctx.system
 
@@ -48,6 +52,11 @@ class Toolkit:
                 "steps": steps,
             },
         )
+
+    def add_cost(self, usd: float) -> None:
+        """Record what this agent's model use cost. The engine adds it to the run total."""
+        if usd > 0:
+            self._ctx.costs[self.agent.id] = self._ctx.costs.get(self.agent.id, 0.0) + usd
 
     async def plan_road(self, steps: list[dict[str, str]]) -> None:
         self._require_overseer()

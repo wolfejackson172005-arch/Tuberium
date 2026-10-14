@@ -49,6 +49,9 @@ class FakeRunner:
         if self.max_delay > 0:
             await asyncio.sleep(random.uniform(self.min_delay, self.max_delay))
 
+    async def close_run(self, run_id: str) -> None:
+        return None
+
     async def turn(self, agent: Agent, message: str, kit: Toolkit) -> AsyncIterator[Draft | Reply]:
         if agent.kind == "overseer":
             async for item in self._overseer_turn(agent, message, kit):

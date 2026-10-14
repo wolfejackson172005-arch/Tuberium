@@ -63,6 +63,12 @@ export const swamp: ThemePack = {
     "--result-border": "#e89bb5",
     "--notice-bg": "#16302e",
     "--notice-text": "#e9f3ee",
+
+    "--cost-text": "#f0d48a",
+    "--modal-backdrop": "rgba(10, 24, 22, 0.6)",
+    "--field-bg": "#e9f3ee",
+    "--field-text": "#16302e",
+    "--field-border": "#6f7a45",
   },
   home: "lilypad",
   line: "reeds",

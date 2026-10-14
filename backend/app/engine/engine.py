@@ -42,8 +42,17 @@ class RunContext:
         self.run_id = run_id
         self.system = system
         self.road: list[str] = []
+        self.busy: set[str] = set()
+        self.costs: dict[str, float] = {}
         self._queue = queue
         self._seq = 0
+
+    def cost(self, agent_id: str) -> float:
+        return round(self.costs.get(agent_id, 0.0), 6)
+
+    @property
+    def total_cost(self) -> float:
+        return round(sum(self.costs.values(), 0.0), 6)
 
     async def emit(self, type: EventType, data: dict[str, Any]) -> RunEvent:
         self._seq += 1
@@ -84,17 +93,29 @@ class Engine:
                 await ctx.emit("run.started", {"taskId": task_id})
                 overseer = system.overseer
                 reply = await self._turn(ctx, overseer, goal, caller=None, depth=0)
-                await ctx.emit("agent.status", {"agentId": overseer.id, "status": "done"})
                 await ctx.emit(
-                    "run.finished", {"status": "done", "result": reply.text, "costUsd": 0.0}
+                    "agent.status",
+                    {"agentId": overseer.id, "status": "done", "costUsd": ctx.cost(overseer.id)},
+                )
+                await ctx.emit(
+                    "run.finished",
+                    {"status": "done", "result": reply.text, "costUsd": ctx.total_cost},
                 )
             except Exception:
                 log.exception("Run %s failed", ctx.run_id)
                 await ctx.emit(
                     "run.finished",
-                    {"status": "failed", "result": "The run stopped because of an error.", "costUsd": 0.0},
+                    {
+                        "status": "failed",
+                        "result": "The run stopped because of an error.",
+                        "costUsd": ctx.total_cost,
+                    },
                 )
             finally:
+                try:
+                    await self.runner.close_run(ctx.run_id)
+                except Exception:
+                    log.exception("Run %s: the runner failed to clean up", ctx.run_id)
                 await queue.put(None)
 
         driver = asyncio.create_task(drive())
@@ -124,13 +145,19 @@ class Engine:
             reason = f"Conversations can only nest {MAX_DEPTH} deep"
             await ctx.emit("message.blocked", {"from": from_id, "to": to_id, "reason": reason})
             return f"Refused: {reason}."
+        if to_id in ctx.busy:
+            reason = f"{to_id} is already busy in this conversation; answer in your reply instead"
+            await ctx.emit("message.blocked", {"from": from_id, "to": to_id, "reason": reason})
+            return f"Refused: {reason}."
 
         await ctx.emit(
             "message.sent",
             {"lineId": line.id, "from": from_id, "to": to_id, "text": text, "files": files, "isReply": False},
         )
         reply = await self._turn(ctx, target, text, caller=from_id, depth=depth + 1)
-        await ctx.emit("agent.status", {"agentId": to_id, "status": "done"})
+        await ctx.emit(
+            "agent.status", {"agentId": to_id, "status": "done", "costUsd": ctx.cost(to_id)}
+        )
         await ctx.emit(
             "message.sent",
             {
@@ -149,9 +176,13 @@ class Engine:
     ) -> Reply:
         kit = Toolkit(self, ctx, agent, caller, depth)
         reply = Reply(text="")
-        async for item in self.runner.turn(agent, message, kit):
-            if isinstance(item, Draft):
-                await ctx.emit(item.type, item.data)
-            else:
-                reply = item
+        ctx.busy.add(agent.id)
+        try:
+            async for item in self.runner.turn(agent, message, kit):
+                if isinstance(item, Draft):
+                    await ctx.emit(item.type, item.data)
+                else:
+                    reply = item
+        finally:
+            ctx.busy.discard(agent.id)
         return reply

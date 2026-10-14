@@ -93,8 +93,8 @@ Open http://localhost:5173.
 M0 runs on fake agents and needs no API key.
 
 1. Get an API key from the [Claude Console](https://platform.claude.com/).
-2. In the backend venv: `pip install claude-agent-sdk` (Python 3.10+). It bundles the Claude Code binary it drives, so there's normally nothing else to install.
-3. Put the key in `backend/.env` (`ANTHROPIC_API_KEY=...`) and set `TUBERIUM_RUNNER=claude`. The SDK doesn't read `.env` files on its own; `backend/app/settings.py` (built in M0 step 1) loads it at startup. Set a monthly spend limit on the key in the Console too.
+2. `claude-agent-sdk` is in `backend/requirements.txt`, so `pip install -r requirements.txt` installs it (Python 3.10+). It bundles the Claude Code binary it drives, so there's normally nothing else to install.
+3. Put the key in `backend/.env` (`ANTHROPIC_API_KEY=...`) and set `TUBERIUM_RUNNER=claude`, then restart the backend. The SDK doesn't read `.env` files on its own; `backend/app/settings.py` (built in M0 step 1) loads it at startup. Set a monthly spend limit on the key in the Console too.
 
 Products built on the Agent SDK have to use API key auth. Anthropic doesn't allow offering claude.ai login in a third-party product without prior approval.
 

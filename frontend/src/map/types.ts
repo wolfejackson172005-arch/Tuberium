@@ -6,7 +6,13 @@ import type { AgentRunState, RunStatus } from "../run/useRun";
 export type HomeData = { agent: Agent; run: AgentRunState; selected: boolean };
 export type HomeNode = Node<HomeData, "home">;
 
-export type YouData = { selected: boolean; runStatus: RunStatus; result?: string; error?: string };
+export type YouData = {
+  selected: boolean;
+  runStatus: RunStatus;
+  result?: string;
+  costUsd?: number;
+  error?: string;
+};
 export type YouNode = Node<YouData, "you">;
 
 export type MapNode = HomeNode | YouNode;

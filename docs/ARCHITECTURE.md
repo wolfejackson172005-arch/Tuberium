@@ -90,7 +90,7 @@ Tools the engine gives every agent, on top of its permission tools:
 | `suggest_change(change, reason)` | overseer | Creates a suggestion card for you. |
 | `finish(result)` | overseer | Ends the run. The result lands on the You circle. |
 
-Safety valves: conversations can only nest 4 deep (A asks B, who asks C...), and every run has a cost cap.
+Safety valves: conversations can only nest 4 deep (A asks B, who asks C...), an agent that is already mid-turn in the conversation can't be talked to again (it would be waiting on itself), and every run has a cost cap.
 
 ## How a run goes
 
@@ -118,7 +118,7 @@ The contract between backend and map. One JSON object per event:
 |---|---|---|
 | `run.started` | `{ taskId }` | reset every home, overseer lights up |
 | `overseer.plan` | `{ steps: [{ agentId, job }] }` | highlight the road |
-| `agent.status` | `{ agentId, status, doing?, step?, steps? }` | home state, "doing" line, progress bar ("2/4") |
+| `agent.status` | `{ agentId, status, doing?, step?, steps?, costUsd? }` | home state, "doing" line, progress bar ("2/4"); `costUsd` is that agent's total cost so far in this run |
 | `agent.action` | `{ agentId, permission, label }` | light that permission badge, show the label |
 | `message.sent` | `{ lineId, from, to, text, files, isReply }` | traveler walks the line carrying a bubble, or a file if `files` isn't empty |
 | `message.blocked` | `{ from, to, reason }` | red dashed flash between the two homes |
@@ -127,7 +127,7 @@ The contract between backend and map. One JSON object per event:
 | `overseer.review` | `{ agentId, verdict, note }` | tick or send-back badge on the home |
 | `overseer.suggestion` | `{ suggestionId, change, reason }` | suggestion card |
 | `run.paused` / `run.resumed` | `{}` | freeze or unfreeze travelers, top bar shows Paused or Running |
-| `run.finished` | `{ status, result, costUsd }` | stop travelers, result on the You circle |
+| `run.finished` | `{ status, result, costUsd }` | stop travelers, result on the You circle; `costUsd` is the whole run's total |
 
 Agent statuses: `idle`, `working`, `traveling`, `waiting` (on you), `done`, `failed`.
 
@@ -147,7 +147,8 @@ Playback controls (top right, like the reference image): pause and play act on t
 
 - `off`: list the tools in `disallowed_tools`, which removes them completely. Start from "everything disallowed" and only open what's granted.
 - `allow`: list them in `allowed_tools`.
-- `ask`: leave them out of both and handle them in the `can_use_tool` callback, which emits `approval.requested` and waits for your answer. In Python this needs streaming input and a placeholder `PreToolUse` hook; copy the pattern from the SDK's "Handle approvals and user input" docs.
+- `ask`: leave them out of both and handle them in the `can_use_tool` callback, which emits `approval.requested` and waits for your answer. In Python this needs streaming input and a placeholder `PreToolUse` hook; copy the pattern from the SDK's "Handle approvals and user input" docs. Until approvals land in M2, `ask` grants nothing: its tools go in `disallowed_tools`, the same as `off`.
+- Every agent's session also uses `permission_mode="dontAsk"` (anything not pre-approved is denied), `setting_sources=[]` and `strict_mcp_config=True`, so your own Claude Code settings and MCP servers can't grant an agent extra tools.
 - Never use `bypassPermissions`.
 - Set each agent's working directory to `workspaces/<systemId>/` so file tools stay inside that folder.
 - `talk_to`, `report_progress` and the overseer tools are custom tools (`@tool` + `create_sdk_mcp_server`), always allowed.

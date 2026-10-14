@@ -3,6 +3,7 @@ import { getSystem, listSystems } from "./api";
 import { Map } from "./map/Map";
 import { AgentPanel, YouPanel } from "./panel/AgentPanel";
 import { useRun } from "./run/useRun";
+import { InputsForm } from "./shell/InputsForm";
 import { SettingsPanel } from "./shell/SettingsPanel";
 import { Sidebar, type View } from "./shell/Sidebar";
 import { TopBar } from "./shell/TopBar";
@@ -43,6 +44,7 @@ export default function App() {
   const [attempt, setAttempt] = useState(0);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [view, setView] = useState<View>("home");
+  const [askingInputs, setAskingInputs] = useState(false);
   const run = useRun();
 
   useEffect(() => {
@@ -65,16 +67,29 @@ export default function App() {
 
   const changeSystem = (id: string) => {
     run.clear();
+    setAskingInputs(false);
     setSelectedId(null);
     setSystemId(id);
   };
 
   const closePanel = useCallback(() => setSelectedId(null), []);
   const closeSettings = useCallback(() => setView("home"), []);
+  const cancelInputs = useCallback(() => setAskingInputs(false), []);
 
   const current = loaded?.id === systemId ? loaded : null;
   const system = current && "system" in current ? current.system : null;
   const task = system ? runnableTask(system) : undefined;
+
+  const pressRun = () => {
+    if (!system || !task) return;
+    if (task.inputs && task.inputs.length > 0) setAskingInputs(true);
+    else run.start(system.id, task.id, {});
+  };
+
+  const submitInputs = (inputs: Record<string, string>) => {
+    setAskingInputs(false);
+    if (system && task) run.start(system.id, task.id, inputs);
+  };
 
   return (
     <ThemeProvider pack={findTheme(themeId)}>
@@ -84,8 +99,9 @@ export default function App() {
           systemId={systemId}
           onSystemChange={changeSystem}
           taskName={task?.name}
-          onRun={() => system && task && run.start(system.id, task.id, {})}
+          onRun={pressRun}
           runStatus={run.runStatus}
+          costUsd={run.costUsd}
         />
         <Sidebar view={view} onView={setView} />
         <main className="app__main">
@@ -116,12 +132,19 @@ export default function App() {
             <SettingsPanel themeId={themeId} onThemeChange={changeTheme} onClose={closeSettings} />
           )}
           {view === "home" && system && selectedId === YOU_ID && (
-            <YouPanel result={run.result} onClose={closePanel} />
+            <YouPanel result={run.result} costUsd={run.costUsd} onClose={closePanel} />
           )}
           {view === "home" && system && selectedId && selectedId !== YOU_ID && (
-            <AgentPanel system={system} agentId={selectedId} events={run.events} onClose={closePanel} />
+            <AgentPanel
+              system={system}
+              agentId={selectedId}
+              run={run.agents[selectedId]}
+              events={run.events}
+              onClose={closePanel}
+            />
           )}
         </main>
+        {askingInputs && task && <InputsForm task={task} onSubmit={submitInputs} onCancel={cancelInputs} />}
       </div>
     </ThemeProvider>
   );
