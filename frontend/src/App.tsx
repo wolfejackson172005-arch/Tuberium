@@ -36,9 +36,9 @@ function saveThemeId(id: ThemeId): void {
 
 type Loaded = { id: string; system: System } | { id: string; failed: true };
 
-export default function App() {
+export default function App({ initialSystemId }: { initialSystemId?: string }) {
   const [themeId, setThemeId] = useState<ThemeId>(() => findTheme(loadThemeId()).id);
-  const [systemId, setSystemId] = useState(DEFAULT_SYSTEM);
+  const [systemId, setSystemId] = useState(initialSystemId ?? DEFAULT_SYSTEM);
   const [systems, setSystems] = useState<SystemSummary[]>([]);
   const [loaded, setLoaded] = useState<Loaded | null>(null);
   const [attempt, setAttempt] = useState(0);

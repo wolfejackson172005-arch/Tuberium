@@ -45,6 +45,8 @@
 .topbar__name {
   font-size: var(--font-size-xl);
   font-weight: var(--font-weight-bold);
+  color: inherit;
+  text-decoration: none;
 }
 
 .topbar__tagline {

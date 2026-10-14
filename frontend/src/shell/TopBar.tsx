@@ -36,7 +36,9 @@ export function TopBar({ systems, systemId, onSystemChange, taskName, onRun, run
   return (
     <header className="topbar">
       <div className="topbar__brand">
-        <span className="topbar__name">tuberium</span>
+        <a className="topbar__name" href="#" title="Back to your worlds">
+          tuberium
+        </a>
         <span className="topbar__tagline">AI Agents Working Together</span>
       </div>
 
