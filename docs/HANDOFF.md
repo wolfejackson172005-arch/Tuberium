@@ -28,6 +28,18 @@ Read this first when you pick the project back up. The team plan is in [plans/m0
 - **Run button** starts the first on-demand task, or else the first task. That's how Inbox Helper's "Watch inbox" runs on the fake engine.
 - **`TUBERIUM_RUNNER=claude`** makes `POST /runs` return 501 until M1 builds the Claude runner.
 
+## Feedback to build later (Oct 14)
+
+Not started. Each note says which roadmap milestone it fits.
+
+- **Controls inside a world (on the map):**
+  - a back button to Worlds (today only the `tuberium` name links back);
+  - a menu;
+  - pause / reactivate for the world (M2: pause, play and stop);
+  - add and remove agents, and add and remove lines (M3: Builder). The note said "roads", but these are lines in the spec, and they stay a web: one line per pair of houses that can talk.
+- **Notifications don't work.** The bell on the Worlds screen, its count, and the approval banners are placeholders. They need real approval requests from M2 to show anything.
+- **Make it look like a 2D video game with animations, not emoji art.** Real sprites for homes, critters and travelers; animated walking, idle and working states; a living map (swaying trees, smoke from chimneys). This is the M5 "Real art for Tuberian" item, pulled forward as a priority. Art goes in the theme pack (`art` can become an image path), so components don't change.
+
 ## Running it (Windows)
 
 On this PC, `py` and `python` aren't on PATH, so the Python environment was made with `uv` at the repo root (`.venv`).
