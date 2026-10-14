@@ -104,3 +104,13 @@ Products built on the Agent SDK have to use API key auth. Anthropic doesn't allo
 pip install jsonschema
 python spec/validate.py
 ```
+
+## Backend tests
+
+The tests always use the fake runner, so they never call Claude or cost anything, even if `backend/.env` says `claude`.
+
+```powershell
+cd backend
+pip install -r requirements-dev.txt
+python -m pytest -q
+```
