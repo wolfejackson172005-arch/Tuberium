@@ -39,6 +39,7 @@ Not started. Each note says which roadmap milestone it fits.
   - add and remove agents, and add and remove lines (M3: Builder). The note said "roads", but these are lines in the spec, and they stay a web: one line per pair of houses that can talk.
 - **Notifications don't work.** The bell on the Worlds screen, its count, and the approval banners are placeholders. They need real approval requests from M2 to show anything.
 - **Make it look like a 2D video game with animations, not emoji art.** Real sprites for homes, critters and travelers; animated walking, idle and working states; a living map (swaying trees, smoke from chimneys). This is the M5 "Real art for Tuberian" item, pulled forward as a priority. Art goes in the theme pack (`art` can become an image path), so components don't change.
+- **Sprite sheets / poses for the Tuberian critter** (and later homes and travelers): idle, walk (left and right), working, carrying a message, carrying a file. Theme pack `traveler` / `art` can later point at a sheet instead of a single PNG; animation lives in CSS or a small sprite player, not in the spec or backend. Same M5 "Real art for Tuberian" item, pulled forward.
 
 ## Running it (Windows)
 

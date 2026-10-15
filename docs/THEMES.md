@@ -91,7 +91,7 @@ type Skin = { title: string; art: string };
 ## Art plan
 
 1. **Now:** emoji placeholders as `art` (🦉 🦜 🐸 ⚙️ 🏠). Free, instant, good enough to build and demo every theme.
-2. **Later:** swap in real images by changing `art` to an image path. Draw them in Figma, commission them, or generate them. Nothing outside the theme files changes.
+2. **Later:** swap in real images by changing `art` to an image path (or a sprite sheet with poses: idle, walk, working, carrying). Draw them in Figma, commission them, or generate them. Animation stays in CSS or a small sprite player; nothing outside the theme files changes.
 3. Tuberian is the default and the brand, so it is the one most worth real art first. The reference image is the target.
 
 ## Adding a theme
