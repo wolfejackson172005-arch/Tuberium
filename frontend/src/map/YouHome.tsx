@@ -1,16 +1,20 @@
 import { Handle, Position, type NodeProps } from "@xyflow/react";
 import { formatUsd } from "../run/cost";
 import { useTheme } from "../themes/useTheme";
-import { skinFor } from "../themes/types";
+import { isImageArt, skinFor } from "../themes/types";
+import { ThemeArt } from "./ThemeArt";
 import type { YouNode } from "./types";
 
 export function YouHome({ data }: NodeProps<YouNode>) {
   const theme = useTheme();
   const skin = skinFor(theme, "you");
   const message = data.error ?? data.result;
+  const classes = ["home", "home--you"];
+  if (isImageArt(skin.art)) classes.push("home--sprite");
+  if (data.selected) classes.push("home--selected");
 
   return (
-    <div className={data.selected ? "home home--you home--selected" : "home home--you"}>
+    <div className={classes.join(" ")}>
       <Handle type="target" position={Position.Top} className="home__handle" isConnectable={false} />
       <Handle type="source" position={Position.Top} className="home__handle" isConnectable={false} />
       {message && (
@@ -22,7 +26,7 @@ export function YouHome({ data }: NodeProps<YouNode>) {
           )}
         </div>
       )}
-      <span className="home__art">{skin.art}</span>
+      <ThemeArt art={skin.art} className="home__art" />
       <div className="home__below">
         <span className="home__name">You</span>
       </div>

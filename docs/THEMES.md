@@ -83,7 +83,9 @@ type ThemePack = {
   traveler: string;                      // one shared walker for the pack today; per-skin is a later type change
   carrying: { message: string; file: string };
   statusWords: Record<AgentStatus, string>;
-  scenery?: string[];                    // decoration art (trees, rocks), never placed on a home or a line
+  scenery?: string[];                    // tall decoration (trees), never placed on a home or a line
+  clutter?: string[];                    // rocks, grass tufts — smaller, denser
+  ground?: string;                       // tiled grass (or other floor) under the village
 };
 
 type Skin = {

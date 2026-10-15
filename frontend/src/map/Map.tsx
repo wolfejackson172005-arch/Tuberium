@@ -14,7 +14,9 @@ import type { System } from "../spec/types";
 import { AgentHome } from "./AgentHome";
 import { PathEdge } from "./PathEdge";
 import { BlockedFlashes, Traveler } from "./Traveler";
-import { placeYou } from "./layout";
+import { Ground } from "./Ground";
+import { groundRect, placeClutter, placeScenery, placeYou } from "./layout";
+import { Scenery } from "./Scenery";
 import { YOU_ID, type HomeNode, type MapNode, type PathEdgeType, type YouNode } from "./types";
 import { YouHome } from "./YouHome";
 import "./map.css";
@@ -51,6 +53,10 @@ interface Props {
 // Spec in, homes and lines out. Remount it (key={system.id}) to load a different system.
 export function Map({ system, run, selectedId, onSelect }: Props) {
   const [nodes, , onNodesChange] = useNodesState<MapNode>(buildNodes(system));
+  const you = useMemo(() => placeYou(system), [system]);
+  const trees = useMemo(() => placeScenery(system, you), [system, you]);
+  const clutter = useMemo(() => placeClutter(system, you), [system, you]);
+  const ground = useMemo(() => groundRect(system, you), [system, you]);
 
   // Run state is merged into node data for display only; it never goes back into the spec.
   const displayNodes = useMemo(
@@ -135,6 +141,8 @@ export function Map({ system, run, selectedId, onSelect }: Props) {
         minZoom={0.3}
       >
         <ViewportPortal>
+          <Ground {...ground} />
+          <Scenery trees={trees} clutter={clutter} />
           <BlockedFlashes flashes={run.blocked} centerOf={centerOf} />
           {run.travelers.map((traveler) => {
             const from = centerOf(traveler.from);

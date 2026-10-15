@@ -2,6 +2,7 @@ import { formatUsd } from "../run/cost";
 import { REVIEW_MARKS } from "../spec/permissions";
 import type { AgentRunState } from "../run/useRun";
 import { useTheme } from "../themes/useTheme";
+import { ThemeArt } from "./ThemeArt";
 
 interface Props {
   art: string;
@@ -18,7 +19,7 @@ export function StatusCard({ art, name, run }: Props) {
   return (
     <div className="status-card">
       <div className="status-card__header">
-        <span className="status-card__icon">{art}</span>
+        <ThemeArt art={art} className="status-card__icon" />
         <span className="status-card__name">{name}</span>
         {costUsd !== undefined && (
           <span className="status-card__cost" title="Cost this run">

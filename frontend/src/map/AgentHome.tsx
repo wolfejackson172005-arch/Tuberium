@@ -1,8 +1,9 @@
 import { Handle, Position, type NodeProps } from "@xyflow/react";
 import { PERMISSIONS } from "../spec/permissions";
 import { useTheme } from "../themes/useTheme";
-import { skinFor } from "../themes/types";
+import { isImageArt, skinFor } from "../themes/types";
 import { StatusCard } from "./StatusCard";
+import { ThemeArt } from "./ThemeArt";
 import type { HomeNode } from "./types";
 
 export function AgentHome({ data }: NodeProps<HomeNode>) {
@@ -13,14 +14,20 @@ export function AgentHome({ data }: NodeProps<HomeNode>) {
 
   const classes = ["home", `home--${run.status}`];
   if (agent.kind === "overseer") classes.push("home--overseer");
+  if (isImageArt(skin.art)) classes.push("home--sprite");
   if (selected) classes.push("home--selected");
 
   return (
     <div className={classes.join(" ")}>
       <Handle type="target" position={Position.Top} className="home__handle" isConnectable={false} />
       <Handle type="source" position={Position.Top} className="home__handle" isConnectable={false} />
-      <StatusCard art={skin.art} name={agent.name} run={run} />
-      <span className="home__art">{skin.art}</span>
+      <StatusCard art={skin.prop ?? skin.art} name={agent.name} run={run} />
+      <ThemeArt art={skin.art} className="home__art" />
+      {skin.prop && (
+        <span className="home__prop" aria-hidden="true">
+          {skin.prop}
+        </span>
+      )}
       <div className="home__below">
         <span className="home__name">{agent.name}</span>
         {badges.length > 0 && (

@@ -1,6 +1,7 @@
 import { useEffect, useState, type TransitionEvent } from "react";
 import type { BlockedFlash, Traveler as TravelerData } from "../run/useRun";
 import { useTheme } from "../themes/useTheme";
+import { ThemeArt } from "./ThemeArt";
 
 type Point = { x: number; y: number };
 
@@ -50,11 +51,15 @@ export function Traveler({ traveler, from, to, onDone }: Props) {
       ? `${theme.carrying.file} ${traveler.files.join(", ")}`
       : `${theme.carrying.message} ${preview(traveler.text)}`;
 
+  const classes = ["traveler"];
+  if (to.x < from.x) classes.push("traveler--leftward");
+  if (arrived) classes.push("traveler--walking");
+
   return (
-    <div className="traveler" style={{ transform: `translate(${at.x}px, ${at.y}px)` }} onTransitionEnd={handleEnd}>
+    <div className={classes.join(" ")} style={{ transform: `translate(${at.x}px, ${at.y}px)` }} onTransitionEnd={handleEnd}>
       <div className={traveler.isReply ? "traveler__body traveler__body--reply" : "traveler__body"}>
         <div className="traveler__bubble">{carrying}</div>
-        <span className="traveler__critter">{theme.traveler}</span>
+        <ThemeArt art={theme.traveler} className="traveler__critter" />
       </div>
     </div>
   );

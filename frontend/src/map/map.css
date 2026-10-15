@@ -8,6 +8,19 @@
   background-size: var(--dot-spacing) var(--dot-spacing);
 }
 
+.map .react-flow,
+.map .react-flow__renderer,
+.map .react-flow__pane {
+  background: transparent;
+}
+
+.map-ground {
+  position: absolute;
+  background-image: var(--map-ground);
+  background-size: var(--map-ground-size);
+  pointer-events: none;
+}
+
 /* ---- homes ---- */
 
 .home {
@@ -51,6 +64,128 @@
 
 .home--overseer .home__art {
   font-size: var(--overseer-art-size);
+}
+
+/* ---- sprite homes: the art is the home, no circle ---- */
+
+.home--sprite,
+.home--sprite.home--overseer,
+.home--sprite.home--you {
+  width: var(--sprite-home-size);
+  height: var(--sprite-home-size);
+  background: none;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.home--sprite.home--overseer {
+  width: var(--sprite-overseer-size);
+  height: var(--sprite-overseer-size);
+}
+
+.home--sprite .home__art {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(var(--sprite-shadow));
+  transform-origin: 50% 90%;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.home--sprite.home--selected {
+  box-shadow: none;
+}
+
+.home--sprite.home--selected .home__art {
+  filter: drop-shadow(var(--sprite-selected-glow)) drop-shadow(var(--sprite-selected-glow)) drop-shadow(var(--sprite-shadow));
+}
+
+.home__prop {
+  position: absolute;
+  left: 0;
+  bottom: var(--space-3);
+  display: grid;
+  place-items: center;
+  width: var(--sprite-prop-size);
+  height: var(--sprite-prop-size);
+  border-radius: 50%;
+  background: var(--prop-bg);
+  border: var(--badge-border-width) solid var(--prop-border);
+  box-shadow: var(--shadow);
+  font-size: var(--sprite-prop-font);
+  line-height: 1;
+}
+
+/* Working homes breathe and puff chimney smoke; finished homes do one happy hop. */
+.home--sprite.home--working .home__art {
+  animation: home-breathe 1.4s ease-in-out infinite;
+}
+
+.home--sprite.home--done .home__art {
+  animation: home-hop 0.6s ease-out 1;
+}
+
+.home--sprite.home--working::before,
+.home--sprite.home--working::after {
+  content: "";
+  position: absolute;
+  left: 64%;
+  top: 6%;
+  width: var(--smoke-size);
+  height: var(--smoke-size);
+  border-radius: 50%;
+  background: var(--smoke-color);
+  pointer-events: none;
+  animation: smoke-puff 2s ease-out infinite;
+}
+
+.home--sprite.home--working::after {
+  animation-delay: 1s;
+}
+
+@keyframes home-breathe {
+  0%,
+  100% {
+    transform: scale(1, 1);
+  }
+  50% {
+    transform: scale(1.03, 0.97);
+  }
+}
+
+@keyframes home-hop {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(var(--hop-height)) scale(0.98, 1.03);
+  }
+  70% {
+    transform: translateY(0) scale(1.03, 0.97);
+  }
+}
+
+@keyframes smoke-puff {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0.6);
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--space-2), var(--smoke-rise)) scale(1.8);
+  }
+}
+
+img.status-card__icon {
+  width: var(--font-size-lg);
+  height: var(--font-size-lg);
+  object-fit: contain;
 }
 
 .home .home__handle {
@@ -322,6 +457,79 @@
 .traveler__critter {
   font-size: var(--traveler-size);
   line-height: 1;
+}
+
+img.traveler__critter {
+  width: var(--traveler-sprite-size);
+  height: var(--traveler-sprite-size);
+  object-fit: contain;
+  filter: drop-shadow(var(--sprite-shadow));
+}
+
+/* The critter faces where it's going and bobs while it walks. */
+.traveler--leftward .traveler__critter {
+  scale: -1 1;
+}
+
+.traveler--walking .traveler__critter {
+  animation: critter-bob 0.32s ease-in-out infinite alternate;
+}
+
+@keyframes critter-bob {
+  from {
+    transform: translateY(0) rotate(-6deg);
+  }
+  to {
+    transform: translateY(var(--bob-height)) rotate(6deg);
+  }
+}
+
+/* ---- scenery: decoration only, under everything that matters ---- */
+
+.scenery {
+  position: absolute;
+  left: 0;
+  top: 0;
+  pointer-events: none;
+}
+
+.scenery__item {
+  position: absolute;
+  object-fit: contain;
+  translate: -50% -90%;
+  filter: drop-shadow(var(--sprite-shadow));
+}
+
+.scenery__item--tree {
+  width: var(--scenery-size);
+  height: var(--scenery-size);
+  transform-origin: 50% 95%;
+  animation: tree-sway 4s ease-in-out infinite alternate;
+  animation-delay: calc(var(--sway-delay) * -1);
+}
+
+.scenery__item--clutter {
+  width: var(--clutter-size);
+  height: var(--clutter-size);
+}
+
+@keyframes tree-sway {
+  from {
+    rotate: -2deg;
+  }
+  to {
+    rotate: 2deg;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home--sprite .home__art,
+  .home--sprite::before,
+  .home--sprite::after,
+  .traveler__critter,
+  .scenery__item {
+    animation: none;
+  }
 }
 
 .traveler__bubble {
