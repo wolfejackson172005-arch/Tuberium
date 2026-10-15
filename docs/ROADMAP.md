@@ -76,7 +76,10 @@ Goal: build your own system without touching JSON.
 - [ ] Theme switcher, choice remembered
 - [ ] All five: Tuberian, Business Professional, Factory, Jungle, Swamp (see [THEMES.md](THEMES.md))
 - [ ] Line styles and traveler animations per theme
-- [ ] Real art for Tuberian
+- [ ] Real art for Tuberian (long-horizon; see the Art plan in [THEMES.md](THEMES.md) — not one PR)
+  - [ ] Unique house sprite per agent template
+  - [ ] Unique outfit / critter per agent template
+  - [ ] Animations for at least the overseer and traveler walk
 
 ## M6: Presets and connections
 

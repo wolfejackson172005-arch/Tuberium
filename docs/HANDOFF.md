@@ -28,7 +28,7 @@ Read this first when you pick the project back up. The team plan is in [plans/m0
 - **Run button** starts the first on-demand task, or else the first task. That's how Inbox Helper's "Watch inbox" runs on the fake engine.
 - **`TUBERIUM_RUNNER=claude`** makes `POST /runs` return 501 until M1 builds the Claude runner.
 
-## Feedback to build later (Oct 14)
+## Feedback to build later (Oct 14–15)
 
 Not started. Each note says which roadmap milestone it fits.
 
@@ -38,8 +38,9 @@ Not started. Each note says which roadmap milestone it fits.
   - pause / reactivate for the world (M2: pause, play and stop);
   - add and remove agents, and add and remove lines (M3: Builder). The note said "roads", but these are lines in the spec, and they stay a web: one line per pair of houses that can talk.
 - **Notifications don't work.** The bell on the Worlds screen, its count, and the approval banners are placeholders. They need real approval requests from M2 to show anything.
-- **Make it look like a 2D video game with animations, not emoji art.** Real sprites for homes, critters and travelers; animated walking, idle and working states; a living map (swaying trees, smoke from chimneys). This is the M5 "Real art for Tuberian" item, pulled forward as a priority. Art goes in the theme pack (`art` can become an image path), so components don't change.
-- **Sprite sheets / poses for the Tuberian critter** (and later homes and travelers): idle, walk (left and right), working, carrying a message, carrying a file. Theme pack `traveler` / `art` can later point at a sheet instead of a single PNG; animation lives in CSS or a small sprite player, not in the spec or backend. Same M5 "Real art for Tuberian" item, pulled forward.
+- **Make it look like a 2D video game with animations, not emoji art.** Real sprites for homes, critters and travelers; animated walking, idle and working states; a living map (swaying trees, smoke from chimneys). Pulled forward as a priority; see the staged Art plan in [THEMES.md](THEMES.md) and the M5 checkboxes in [ROADMAP.md](ROADMAP.md). Art lives in the theme pack. Themes still change the look, never the meaning: permission badges, costs and approval requests stay visible and are never renamed.
+- **Sprite sheets / poses for the Tuberian critter** (and later homes and travelers): idle, walk (left and right), working, carrying a message, carrying a file. Theme pack `traveler` / `art` can later point at a sheet instead of a single PNG; animation lives in CSS or a small sprite player, not in the spec or backend. This is the "Later" stage of the Art plan, not a single M5 PR.
+- **Unique house + outfit per agent template (Oct 15, long-horizon art track).** Each character/agent type (researcher, reviewer, writer, and the rest listed under "Characters by agent template" in THEMES.md) should have a **different little house and a different outfit/critter**, and in some cases its own animation. Today's shared cottage + emoji prop is a prototype only. This spans **M5 and beyond**, not one PR: unique house sprite per template, unique traveler/outfit per template, then optional unique idle/work animation, then pose sheets. `skins[template].art` already supports a different image path per template; making `traveler` per-skin is a later type change. Do not generate fifteen houses or rewrite the map in one turn.
 
 ## Running it (Windows)
 

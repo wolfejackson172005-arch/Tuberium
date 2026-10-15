@@ -38,7 +38,7 @@ So control info never gets themed away:
 
 ## Characters by agent template
 
-Each agent's `template` picks its character and title in the active theme.
+Each agent's `template` picks its character and title in the active theme. Long term, each row is its own house sprite and outfit, not one shared cottage with a different prop.
 
 | Template | Tuberian (critter + prop at home) | Business | Factory | Jungle | Swamp |
 |---|---|---|---|---|---|
@@ -80,19 +80,30 @@ type ThemePack = {
   home: "cottage" | "circle" | "machine" | "treehouse" | "lilypad";
   line: "path" | "plain" | "conveyor" | "vine" | "reeds";
   skins: Record<string, Skin>;           // keyed by template, plus "overseer", "you" and "default"
-  traveler: string;                      // the character that walks the lines
+  traveler: string;                      // one shared walker for the pack today; per-skin is a later type change
   carrying: { message: string; file: string };
   statusWords: Record<AgentStatus, string>;
+  scenery?: string[];                    // decoration art (trees, rocks), never placed on a home or a line
 };
 
-type Skin = { title: string; art: string };
+type Skin = {
+  title: string;
+  art: string;                           // image path under /art/<theme>/ (or emoji). Per-template path is already allowed.
+  prop?: string;                         // prototype only: tells homes sharing one cottage sprite apart
+};
 ```
 
 ## Art plan
 
-1. **Now:** emoji placeholders as `art` (🦉 🦜 🐸 ⚙️ 🏠). Free, instant, good enough to build and demo every theme.
-2. **Later:** swap in real images by changing `art` to an image path (or a sprite sheet with poses: idle, walk, working, carrying). Draw them in Figma, commission them, or generate them. Animation stays in CSS or a small sprite player; nothing outside the theme files changes.
-3. Tuberian is the default and the brand, so it is the one most worth real art first. The reference image is the target.
+Themes change the look, never the meaning. Permission badges, costs and approval requests stay visible and keep the same names in every theme. Only colors and sprites change.
+
+This is a **long-horizon track** (M5 and beyond), not one PR. Do not generate every house in a single turn.
+
+1. **Now (prototype):** one shared cottage sprite plus a small `prop` (often still an emoji) so jobs look a little different. Good enough to demo. Not the target look.
+2. **Next (Tuberian pack):** unique **house** and unique **traveler/outfit** per template (`overseer`, `researcher`, `scout`, `writer`, `reviewer`, `analyst`, `reader`, `sorter`, `planner`, `cleaner`, `designer`, `poster`, `applier`, `trader`, `default`, plus `you`). `skins[template].art` already supports a different image path per template — point it at a house sprite instead of sharing one cottage. `ThemePack.traveler` is still one string for the whole pack; when outfits walk the lines, traveler may need to become per-skin. That is a type change in `frontend/src/themes/types.ts` and this file **when we do it**, not before.
+3. **Later:** pose sheets per character (idle, walk, working, carrying a message, carrying a file). Animation stays in CSS or a small sprite player; the spec and backend stay art-free. Draw, commission, or generate the sheets.
+
+Tuberian is the default and the brand, so it is the one most worth real art first. The reference image is the target. Other themes can keep simpler placeholders until Tuberian is done.
 
 ## Adding a theme
 
